@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/rvItemImg"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="4dp"
+        android:src="@drawable/pic01"
+        />
+
+    <TextView
+        android:id="@+id/rvItemCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/rvItemImg"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="5dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:text="ma catégorie > sous catégorie"
+        android:ellipsize="end"
+        />
+
+    <TextView
+        android:id="@+id/rvItemDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:lines="1"
+        tools:text="10/05/19"
+        />
+
+    <TextView
+        android:id="@+id/rvItemDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rvItemCategory"
+        android:layout_toRightOf="@+id/rvItemImg"
+        android:layout_gravity="center_horizontal"
+        android:lines="2"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:ellipsize="end"
+        tools:text="détails de ma description on va y aller pour parler de tout et de rien tel un politique en face de gens normaux !!! qui viennent avec l'espoir."
+        />
+
+</RelativeLayout>
