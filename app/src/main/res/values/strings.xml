@@ -3,4 +3,5 @@
     <string name="tab_top_stories">TOP STORIES</string>
     <string name="tab_most_popular">MOST POPULAR</string>
     <string name="tab_business">BUSINESS</string>
+    <string name="action_settings">Settings</string>
 </resources>
