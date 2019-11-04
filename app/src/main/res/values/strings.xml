@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">TabbedActivity</string>
+    <string name="app_name">NetApp</string>
     <string name="tab_top_stories">TOP STORIES</string>
     <string name="tab_most_popular">MOST POPULAR</string>
     <string name="tab_business">BUSINESS</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
