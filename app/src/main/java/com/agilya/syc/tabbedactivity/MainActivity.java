@@ -44,17 +44,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        content = findViewById(R.id.rc_content);
+        content = findViewById(R.id.rv_list);
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
         content.setLayoutManager(verticalLayoutManager);
-
 
         loadData();
 
     }
 
     private void loadData() {
-
+        //
         RestClient client = new RestClient();
         client.getService().getNews().enqueue(new Callback<List<New>>() {
             @Override
