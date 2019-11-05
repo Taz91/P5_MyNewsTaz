@@ -1,4 +1,4 @@
-package com.agilya.syc.tabbedactivity.ui.main;
+package com.agilya.syc.tabbedactivity.ui.activity;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
