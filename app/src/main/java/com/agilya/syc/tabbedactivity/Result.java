@@ -5,50 +5,63 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * @author Deyine Jiddou (deyine.jiddou@gmail.com)
- * Created at 2019-10-25
- */
-public class New implements Serializable
+public class Result implements Serializable
 {
+    @SerializedName("section")
+    @Expose
+    private String section;
+    @SerializedName("subsection")
+    @Expose
+    private String subsection;
     @SerializedName("title")
     @Expose
     private String title;
-    @SerializedName("description")
+    @SerializedName("abstract")
     @Expose
-    private String description;
+    private String _abstract;
     @SerializedName("published_date")
     @Expose
     private String publishedDate;
-    private final static long serialVersionUID = 1267195745348537792L;
+
+    //pourquoi ci-dessous ??
+    private final static long serialVersionUID = 945893664557038430L;
+
+    public String getSection() {
+        section = ("".equals(getSubsection())) ? this.section : this.section + " > " + getSubsection();
+        return section;
+    }
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getSubsection() { return subsection; }
+    public void setSubsection(String subsection) {
+        this.subsection = subsection;
+    }
 
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAbstract() {
+        return _abstract;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAbstract(String _abstract) {
+        this._abstract = _abstract;
     }
 
     public String getPublishedDate() {
         return publishedDate;
     }
-
     public void setPublishedDate(String publishedDate) {
         this.publishedDate = publishedDate;
     }
 
 }
-
-    //public String getCategory(){ return category; };
+//public String getCategory(){ return category; };
     /*
     public void setCategory(){
         this.category = ("".equals(getSubsection())) ? getSection() : getSection() + " > " + getSubsection();
@@ -63,4 +76,3 @@ public class New implements Serializable
     };
 
  */
-

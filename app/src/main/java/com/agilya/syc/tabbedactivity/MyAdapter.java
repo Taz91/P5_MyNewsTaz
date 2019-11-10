@@ -11,10 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private List<New> myNews;
-
+    //private List<New> myNews;
+    private List<Result> myNews;
+    /*
     public MyAdapter(List<New> myNews) {
+        this.myNews = myNews;
+    }
+    */
 
+    public MyAdapter(List<Result> myNews) {
         this.myNews = myNews;
     }
 
@@ -49,10 +54,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        New n = myNews.get(position);
+        Result n = myNews.get(position);
 
         holder.itemTitle.setText(n.getTitle());
         holder.itemDate.setText(n.getPublishedDate());
+        holder.itemCategory.setText(n.getSection());
         //holder.itemCategory.setText(n.getCategory());
 
     }

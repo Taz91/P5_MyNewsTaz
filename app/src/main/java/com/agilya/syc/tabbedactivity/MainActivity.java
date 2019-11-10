@@ -1,8 +1,8 @@
 package com.agilya.syc.tabbedactivity;
 
-import android.Manifest;
 import android.os.Bundle;
 
+import com.agilya.syc.tabbedactivity.archives.RestClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -53,9 +53,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        //
-        RestClient client = new RestClient();
-        client.getService().getNews().enqueue(new Callback<List<New>>() {
+        NewsService client = RetrofitInstance.getRetrofitInstance().create(NewsService.class);
+
+        //RestClient client = new RestClient();
+        //client.getService().getNews().enqueue(new Callback<List<New>>() {
+    /*
+        client.getNews().enqueue(new Callback<List<New>>(){
             @Override
             public void onResponse(Call<List<New>> call, Response<List<New>> response) {
                 Toast.makeText(MainActivity.this, "Yesss c'est ok", Toast.LENGTH_LONG).show();
@@ -69,6 +72,33 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Une erreur", Toast.LENGTH_LONG).show();
             }
         });
+    */
+        client.getNewResult().enqueue(new Callback<NewResult>(){
+            @Override
+            public void onResponse(Call<NewResult> call, Response<NewResult> response) {
+                Toast.makeText(MainActivity.this, "Yesss c'est ok", Toast.LENGTH_LONG).show();
+
+                List<Result> result = response.body().getResults();
+
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //
+                // est ce que cela veut dire que mon adapter doit être idem que ma classe ???
+                //
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                MyAdapter adapter = new MyAdapter(result);
+                content.setAdapter(adapter);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<NewResult> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Une erreur", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     @Override

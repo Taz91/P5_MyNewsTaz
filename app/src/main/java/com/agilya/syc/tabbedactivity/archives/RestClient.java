@@ -1,4 +1,6 @@
-package com.agilya.syc.tabbedactivity;
+package com.agilya.syc.tabbedactivity.archives;
+
+import com.agilya.syc.tabbedactivity.NewsService;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
