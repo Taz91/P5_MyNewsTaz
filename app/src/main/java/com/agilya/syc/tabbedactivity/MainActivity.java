@@ -80,17 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
                 List<Result> result = response.body().getResults();
 
-
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //
-                // est ce que cela veut dire que mon adapter doit être idem que ma classe ???
-                //
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
                 MyAdapter adapter = new MyAdapter(result);
                 content.setAdapter(adapter);
-
-
             }
 
             @Override
@@ -116,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_notifications) {
             return true;
         }
 

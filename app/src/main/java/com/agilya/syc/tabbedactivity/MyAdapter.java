@@ -58,7 +58,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         holder.itemTitle.setText(n.getTitle());
         holder.itemDate.setText(n.getPublishedDate());
-        holder.itemCategory.setText(n.getSection());
+        holder.itemCategory.setText(n.getCategory());
         //holder.itemCategory.setText(n.getCategory());
 
     }

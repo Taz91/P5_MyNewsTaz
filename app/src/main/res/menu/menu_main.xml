@@ -3,8 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.agilya.syc.tabbedactivity.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/menu_search"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/action_search"
+        android:icon="@drawable/search_18"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_notifications"
+        android:orderInCategory="200"
+        android:title="@string/Notifications"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_help"
+        android:orderInCategory="300"
+        android:title="@string/help"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_about"
+        android:orderInCategory="400"
+        android:title="@string/about"
         app:showAsAction="never" />
 </menu>

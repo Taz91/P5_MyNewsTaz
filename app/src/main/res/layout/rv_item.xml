@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <!--
     <ImageView
         android:id="@+id/rvItemImg"
         android:layout_width="70dp"
@@ -13,21 +12,17 @@
         android:layout_margin="4dp"
         android:src="@drawable/pic01"
         />
-    -->
     <TextView
         android:id="@+id/rvItemCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:layout_toRightOf="@+id/rvItemImg"
         android:layout_gravity="center_horizontal"
         android:paddingBottom="5dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         tools:text="ma catégorie > sous catégorie"
         android:ellipsize="end"
         />
-        <!-- remettre dans rvItemCategory quand il y aura l'image
-        android:layout_toRightOf="@+id/rvItemImg"
-        -->
 
     <TextView
         android:id="@+id/rvItemDate"
@@ -45,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_below="@+id/rvItemCategory"
-
+        android:layout_toRightOf="@+id/rvItemImg"
         android:layout_gravity="center_horizontal"
         android:lines="2"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -53,7 +48,4 @@
         tools:text="détails de ma description on va y aller pour parler de tout et de rien tel un politique en face de gens normaux !!! qui viennent avec l'espoir."
         />
 
-        <!-- remettre dans rvItemDescription quand il y aura l'image
-        android:layout_toRightOf="@+id/rvItemImg"
-        -->
 </RelativeLayout>

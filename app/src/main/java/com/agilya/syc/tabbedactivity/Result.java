@@ -22,12 +22,15 @@ public class Result implements Serializable
     @SerializedName("published_date")
     @Expose
     private String publishedDate;
-
-    //pourquoi ci-dessous ??
     private final static long serialVersionUID = 945893664557038430L;
 
+
+    @Expose
+    private String category;
+
+
     public String getSection() {
-        section = ("".equals(getSubsection())) ? this.section : this.section + " > " + getSubsection();
+        //section = ("".equals(getSubsection())) ? this.section : this.section + " > " + getSubsection();
         return section;
     }
     public void setSection(String section) {
@@ -60,19 +63,7 @@ public class Result implements Serializable
         this.publishedDate = publishedDate;
     }
 
+    public String getCategory(){
+        this.category = ("".equals(getSubsection())) ? this.getSection() : this.getSection() + " > " + this.getSubsection();
+        return category; };
 }
-//public String getCategory(){ return category; };
-    /*
-    public void setCategory(){
-        this.category = ("".equals(getSubsection())) ? getSection() : getSection() + " > " + getSubsection();
-
-//        if("".equals(getSubsection())){
-//            this.category = getSection();
-//        }
-//        else{
-//            this.category = getSection() + " > " + getSubsection();
-//        }
-
-    };
-
- */

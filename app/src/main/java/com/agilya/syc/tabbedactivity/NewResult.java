@@ -12,7 +12,6 @@ import java.util.List;
  */
 public class NewResult implements Serializable
 {
-
     @SerializedName("status")
     @Expose
     private String status;
@@ -31,8 +30,6 @@ public class NewResult implements Serializable
     @SerializedName("results")
     @Expose
     private List<Result> results = null;
-
-    //pourquoi ci-dessous ??
     private final static long serialVersionUID = 7686854727260762046L;
 
     public String getStatus() {
