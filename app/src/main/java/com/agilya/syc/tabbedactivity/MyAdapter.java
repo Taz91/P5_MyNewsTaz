@@ -57,9 +57,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         Result n = myNews.get(position);
 
         holder.itemTitle.setText(n.getTitle());
-        holder.itemDate.setText(n.getPublishedDate());
+        //holder.itemDate.setText(n.getPublishedDate());
+        holder.itemDate.setText(n.getDate());
         holder.itemCategory.setText(n.getCategory());
-        //holder.itemCategory.setText(n.getCategory());
 
     }
 

@@ -49,30 +49,11 @@ public class MainActivity extends AppCompatActivity {
         content.setLayoutManager(verticalLayoutManager);
 
         loadData();
-
     }
 
     private void loadData() {
         NewsService client = RetrofitInstance.getRetrofitInstance().create(NewsService.class);
 
-        //RestClient client = new RestClient();
-        //client.getService().getNews().enqueue(new Callback<List<New>>() {
-    /*
-        client.getNews().enqueue(new Callback<List<New>>(){
-            @Override
-            public void onResponse(Call<List<New>> call, Response<List<New>> response) {
-                Toast.makeText(MainActivity.this, "Yesss c'est ok", Toast.LENGTH_LONG).show();
-
-                MyAdapter adapter = new MyAdapter(response.body());
-                content.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<List<New>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Une erreur", Toast.LENGTH_LONG).show();
-            }
-        });
-    */
         client.getNewResult().enqueue(new Callback<NewResult>(){
             @Override
             public void onResponse(Call<NewResult> call, Response<NewResult> response) {

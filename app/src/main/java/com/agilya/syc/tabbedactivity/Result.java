@@ -2,8 +2,9 @@ package com.agilya.syc.tabbedactivity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
+
+import static com.agilya.syc.tabbedactivity.utils.Utils.convertDate;
 
 public class Result implements Serializable
 {
@@ -24,15 +25,13 @@ public class Result implements Serializable
     private String publishedDate;
     private final static long serialVersionUID = 945893664557038430L;
 
-
     @Expose
     private String category;
+    @Expose
+    private String dateString;
 
 
-    public String getSection() {
-        //section = ("".equals(getSubsection())) ? this.section : this.section + " > " + getSubsection();
-        return section;
-    }
+    public String getSection() { return section; }
     public void setSection(String section) {
         this.section = section;
     }
@@ -63,7 +62,13 @@ public class Result implements Serializable
         this.publishedDate = publishedDate;
     }
 
+    // customize data
     public String getCategory(){
         this.category = ("".equals(getSubsection())) ? this.getSection() : this.getSection() + " > " + this.getSubsection();
-        return category; };
+        return this.category; };
+    public String getDate(){
+        this.dateString = convertDate( this.getPublishedDate() );
+        return this.dateString;
+    }
+
 }

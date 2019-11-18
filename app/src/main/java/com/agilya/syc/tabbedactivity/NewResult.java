@@ -16,7 +16,7 @@ public class NewResult implements Serializable
     @Expose
     private String status;
     @SerializedName("copyright")
-    @Expose
+    //@Expose
     private String copyright;
     @SerializedName("section")
     @Expose
@@ -25,11 +25,12 @@ public class NewResult implements Serializable
     @Expose
     private String lastUpdated;
     @SerializedName("num_results")
-    @Expose
+    //@Expose
     private Integer numResults;
     @SerializedName("results")
     @Expose
     private List<Result> results = null;
+
     private final static long serialVersionUID = 7686854727260762046L;
 
     public String getStatus() {
