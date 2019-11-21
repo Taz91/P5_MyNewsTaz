@@ -1,39 +1,62 @@
 package com.agilya.syc.tabbedactivity;
+import com.agilya.syc.tabbedactivity.models.NewResult;
+import com.agilya.syc.tabbedactivity.models.Result;
 
+import android.content.res.Resources;
 import android.os.Bundle;
-
-import com.agilya.syc.tabbedactivity.archives.RestClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import java.util.List;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+//import butterknife.ButterKnife;
+//import butterknife.BindView;
+
 
 public class MainActivity extends AppCompatActivity {
-
     RecyclerView content;
+    private static int tabChoice = 1;
+    private Call<NewResult> call;
+    private String typeNews;
+    private static String API_KEY = "J0iJw0a8fdshubHztJsOJxEEg6hPstOG";
+
+    //Resources res = getResources();
+    //private static final String API_KEY = Context.get  //.getResources().getString(R.string.news_api_key);
+    //String API_KEY = res.getString(R.string.news_api_key);
+
+
+
+    //@BindView(R.id.main_news) CoordinatorLayout mainNews;
+    //@BindView(R.id.appbarlayout) AppBarLayout appBarLayout;
+    //@BindView(R.id.toolbar) Toolbar toolbar;
+    //@BindView(R.id.fab) FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //ButterKnife.bind(this);
+
+
+
+
         //retro compatibilté
+        //Knife //
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //btn en bas
+        //Knife //
         FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,9 +75,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        NewsService client = RetrofitInstance.getRetrofitInstance().create(NewsService.class);
 
-        client.getNewResult().enqueue(new Callback<NewResult>(){
+        // A traiter switch sur 2 cas
+        //          == 1) MostPopular / TopStories
+        //          == 2) Search
+
+        GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
+        switch (tabChoice){
+            case 1:
+                call = newsDataService.getTopStoriesNew("science", API_KEY);
+                break;
+            case 2:
+                /*
+                MostPopular : 3 types (emailed/viewed/shared), periode 1,7,30j
+                https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
+                https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
+
+                Cas shared: shared type = email, facebook, twitter, periode = 1,7,30j
+                https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
+                https://api.nytimes.com/svc/mostpopular/v2/shared/1.json?api-key=yourkey
+                */
+
+                if (typeNews.equals("facebook") || typeNews.equals("email") || typeNews.equals("twitter") ) {
+                    //shared -- partie de periode --
+                    call = newsDataService.getPopularNews("shared/1/", "7.json", API_KEY);
+                }
+                else if (typeNews.equals("shared")){
+
+                }
+                call = newsDataService.getPopularNews("shared", "7.json", API_KEY);
+                break;
+        }
+
+            //newsDataService.getTopStoriesNew("science.json", API_KEY).enqueue(new Callback<NewResult>(){
+            call.enqueue(new Callback<NewResult>(){
             @Override
             public void onResponse(Call<NewResult> call, Response<NewResult> response) {
                 Toast.makeText(MainActivity.this, "Yesss c'est ok", Toast.LENGTH_LONG).show();

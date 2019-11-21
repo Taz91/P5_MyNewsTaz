@@ -3,21 +3,16 @@ package com.agilya.syc.tabbedactivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.agilya.syc.tabbedactivity.models.Result;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    //private List<New> myNews;
     private List<Result> myNews;
-    /*
-    public MyAdapter(List<New> myNews) {
-        this.myNews = myNews;
-    }
-    */
 
     public MyAdapter(List<Result> myNews) {
         this.myNews = myNews;

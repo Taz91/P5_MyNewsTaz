@@ -1,4 +1,4 @@
-package com.agilya.syc.tabbedactivity;
+package com.agilya.syc.tabbedactivity.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -36,7 +36,6 @@ public class NewResult implements Serializable
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
@@ -44,7 +43,6 @@ public class NewResult implements Serializable
     public String getCopyright() {
         return copyright;
     }
-
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
@@ -52,7 +50,6 @@ public class NewResult implements Serializable
     public String getSection() {
         return section;
     }
-
     public void setSection(String section) {
         this.section = section;
     }
@@ -60,7 +57,6 @@ public class NewResult implements Serializable
     public String getLastUpdated() {
         return lastUpdated;
     }
-
     public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
@@ -68,7 +64,6 @@ public class NewResult implements Serializable
     public Integer getNumResults() {
         return numResults;
     }
-
     public void setNumResults(Integer numResults) {
         this.numResults = numResults;
     }
@@ -76,7 +71,6 @@ public class NewResult implements Serializable
     public List<Result> getResults() {
         return results;
     }
-
     public void setResults(List<Result> results) {
         this.results = results;
     }
