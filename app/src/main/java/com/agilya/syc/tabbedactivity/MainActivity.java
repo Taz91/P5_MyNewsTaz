@@ -2,12 +2,17 @@ package com.agilya.syc.tabbedactivity;
 import com.agilya.syc.tabbedactivity.models.NewResult;
 import com.agilya.syc.tabbedactivity.models.Result;
 
-import android.content.res.Resources;
 import android.os.Bundle;
+
+import com.agilya.syc.tabbedactivity.utils.GetNewsDataService;
+import com.agilya.syc.tabbedactivity.utils.MyAdapter;
+import com.agilya.syc.tabbedactivity.utils.RetrofitInstance;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
@@ -20,8 +25,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-//import butterknife.ButterKnife;
-//import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.BindView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,27 +42,29 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //@BindView(R.id.main_news) CoordinatorLayout mainNews;
-    //@BindView(R.id.appbarlayout) AppBarLayout appBarLayout;
-    //@BindView(R.id.toolbar) Toolbar toolbar;
-    //@BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.main_news)
+    CoordinatorLayout mainNews;
+    @BindView(R.id.appbarlayout)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.fab) FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //ButterKnife.bind(this);
+        ButterKnife.bind(this);
 
 
 
 
         //retro compatibilté
         //Knife //
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        //Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //btn en bas
         //Knife //
-        FloatingActionButton fab = findViewById(R.id.fab);
+        ///FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

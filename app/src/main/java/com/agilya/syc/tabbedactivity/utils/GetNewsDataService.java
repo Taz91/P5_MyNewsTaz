@@ -1,4 +1,4 @@
-package com.agilya.syc.tabbedactivity;
+package com.agilya.syc.tabbedactivity.utils;
 
 import com.agilya.syc.tabbedactivity.models.NewResult;
 
