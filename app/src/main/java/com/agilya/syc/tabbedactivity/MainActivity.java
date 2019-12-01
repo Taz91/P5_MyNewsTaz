@@ -2,6 +2,7 @@ package com.agilya.syc.tabbedactivity;
 import com.agilya.syc.tabbedactivity.models.NewResult;
 import com.agilya.syc.tabbedactivity.models.Result;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.agilya.syc.tabbedactivity.utils.GetNewsDataService;
@@ -20,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import java.util.List;
-
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,10 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @BindView(R.id.main_news)
-    CoordinatorLayout mainNews;
-    @BindView(R.id.appbarlayout)
-    AppBarLayout appBarLayout;
+    @BindView(R.id.main_news) CoordinatorLayout mainNews;
+    @BindView(R.id.appbarlayout) AppBarLayout appBarLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.fab) FloatingActionButton fab;
 
@@ -78,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
         content.setLayoutManager(verticalLayoutManager);
 
-        loadData();
+        //loadData();
     }
 
     private void loadData() {
@@ -148,11 +146,20 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_notifications) {
-            return true;
+        switch(id){
+            case R.id.menu_notifications:
+                callNotificationParams();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
+
+    //optionMenu Notification
+    private void callNotificationParams(){
+        Intent notifParams = new Intent(MainActivity.this,Fragment_category.class);
+        startActivity(notifParams);
+    }
+
 }
