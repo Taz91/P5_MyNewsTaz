@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">My News</string>
+    <string name="tab_top_stories">TOP STORIES</string>
+    <string name="tab_most_popular">MOST POPULAR</string>
+    <string name="tab_business">BUSINESS</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_Notifications">Notifications</string>
+    <string name="Notifications">Notifications</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string name="news_api_key">J0iJw0a8fdshubHztJsOJxEEg6hPstOG</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="strLogin">Login :</string>
+    <string name="strPwd">Password :</string>
+    <string name="strtxtDescro">saisir id</string>
+    <string name="strValider">Valider</string>
+</resources>
