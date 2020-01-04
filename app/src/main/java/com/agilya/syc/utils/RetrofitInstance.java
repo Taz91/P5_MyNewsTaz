@@ -1,4 +1,4 @@
-package com.agilya.syc.tabbedactivity.utils;
+package com.agilya.syc.utils;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

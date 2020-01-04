@@ -1,4 +1,4 @@
-package com.agilya.syc.tabbedactivity.ui.main;
+package com.agilya.syc.ui;
 
 import android.content.Context;
 

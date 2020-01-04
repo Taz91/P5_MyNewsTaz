@@ -1,11 +1,11 @@
-package com.agilya.syc.tabbedactivity.models;
+package com.agilya.syc.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-import static com.agilya.syc.tabbedactivity.utils.Utils.convertDate;
+import static com.agilya.syc.utils.Utils.convertDate;
 
 public class Result implements Serializable
 {

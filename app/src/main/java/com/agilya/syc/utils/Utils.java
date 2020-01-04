@@ -1,4 +1,4 @@
-package com.agilya.syc.tabbedactivity.utils;
+package com.agilya.syc.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

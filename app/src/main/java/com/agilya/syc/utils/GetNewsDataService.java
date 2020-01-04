@@ -1,6 +1,6 @@
-package com.agilya.syc.tabbedactivity.utils;
+package com.agilya.syc.utils;
 
-import com.agilya.syc.tabbedactivity.models.NewResult;
+import com.agilya.syc.models.NewResult;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

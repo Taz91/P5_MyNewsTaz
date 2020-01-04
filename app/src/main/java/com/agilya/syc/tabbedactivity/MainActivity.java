@@ -1,13 +1,13 @@
 package com.agilya.syc.tabbedactivity;
-import com.agilya.syc.tabbedactivity.models.NewResult;
-import com.agilya.syc.tabbedactivity.models.Result;
+import com.agilya.syc.models.NewResult;
+import com.agilya.syc.models.Result;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.agilya.syc.tabbedactivity.utils.GetNewsDataService;
-import com.agilya.syc.tabbedactivity.utils.MyAdapter;
-import com.agilya.syc.tabbedactivity.utils.RetrofitInstance;
+import com.agilya.syc.utils.GetNewsDataService;
+import com.agilya.syc.utils.MyAdapter;
+import com.agilya.syc.utils.RetrofitInstance;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     //private static final String API_KEY = Context.get  //.getResources().getString(R.string.news_api_key);
     //String API_KEY = res.getString(R.string.news_api_key);
 
-
+//test du soir !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     @BindView(R.id.main_news) CoordinatorLayout mainNews;
     @BindView(R.id.appbarlayout) AppBarLayout appBarLayout;

@@ -1,4 +1,4 @@
-package com.agilya.syc.tabbedactivity.models;
+package com.agilya.syc.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
