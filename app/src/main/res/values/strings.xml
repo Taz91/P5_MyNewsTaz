@@ -17,4 +17,7 @@
     <string name="strPwd">Password :</string>
     <string name="strtxtDescro">saisir id</string>
     <string name="strValider">Valider</string>
+    <string name="title_activity_tabs_test">TabsTest</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

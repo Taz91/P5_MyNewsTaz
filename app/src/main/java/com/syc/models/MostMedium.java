@@ -1,12 +1,11 @@
-package com.agilya.syc.tabbedactivity.models;
+package com.syc.models;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+ import java.io.Serializable;
+        import java.util.List;
+        import com.google.gson.annotations.Expose;
+        import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-import java.util.List;
-
-public class Medium implements Serializable
+public class MostMedium implements Serializable
 {
 
     @SerializedName("type")
@@ -26,13 +25,12 @@ public class Medium implements Serializable
     private Integer approvedForSyndication;
     @SerializedName("media-metadata")
     @Expose
-    private List<MediaMetadatum> mediaMetadata = null;
-    private final static long serialVersionUID = -6267117911635788132L;
+    private List<MostMediaMetadatum> mediaMetadata = null;
+    private final static long serialVersionUID = 1032530994080612445L;
 
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }
@@ -40,7 +38,6 @@ public class Medium implements Serializable
     public String getSubtype() {
         return subtype;
     }
-
     public void setSubtype(String subtype) {
         this.subtype = subtype;
     }
@@ -48,7 +45,6 @@ public class Medium implements Serializable
     public String getCaption() {
         return caption;
     }
-
     public void setCaption(String caption) {
         this.caption = caption;
     }
@@ -56,7 +52,6 @@ public class Medium implements Serializable
     public String getCopyright() {
         return copyright;
     }
-
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
@@ -64,17 +59,14 @@ public class Medium implements Serializable
     public Integer getApprovedForSyndication() {
         return approvedForSyndication;
     }
-
     public void setApprovedForSyndication(Integer approvedForSyndication) {
         this.approvedForSyndication = approvedForSyndication;
     }
 
-    public List<MediaMetadatum> getMediaMetadata() {
+    public List<MostMediaMetadatum> getMediaMetadata() {
         return mediaMetadata;
     }
-
-    public void setMediaMetadata(List<MediaMetadatum> mediaMetadata) {
+    public void setMediaMetadata(List<MostMediaMetadatum> mediaMetadata) {
         this.mediaMetadata = mediaMetadata;
     }
-
 }
