@@ -2,94 +2,144 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_news"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
-    <!--
-    <com.google.android.material.appbar.AppBarLayout
+     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/searchactivity_appbarlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="?actionBarSize"
-            android:padding="@dimen/appbar_padding"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+         <androidx.appcompat.widget.Toolbar
+             android:id="@+id/searchactivity_toolbar"
+             android:layout_width="match_parent"
+             android:layout_height="?attr/actionBarSize"
+             android:background="?attr/colorPrimary"
+             app:popupTheme="@style/AppTheme.AppBarOverlay">
+
+             <TextView
+                 android:id="@+id/searchactivity_title"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:gravity="center"
+                 android:minHeight="?actionBarSize"
+                 android:padding="@dimen/appbar_padding"
+                 android:text="@string/app_search"
+                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-    -->
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_start"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <CheckBox android:id="@+id/cb_arts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:text="Arts"/>
-            <!-- android:onClick="onCheckboxArtsClicked" -->
-
-            <CheckBox android:id="@+id/cb_business"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:text="Business"/>
-            <!-- android:onClick="onCheckboxBusinessClicked" -->
-
-            <CheckBox android:id="@+id/cb_entrepreneurs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:text="Entrepreneurs"/>
-            <!-- android:onClick="onCheckboxEntrepreneursClicked" -->
-
-        </LinearLayout>
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/searchactivity_Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="word1 word2 word n" />
 
-            <CheckBox android:id="@+id/cb_politics"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:text="Politics"/>
-            <!-- android:onClick="onCheckboxPoliticsClicked"/> -->
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            />
 
-            <CheckBox android:id="@+id/cb_sports"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:text="Sports"/>
-            <!-- android:onClick="onCheckboxSportsClicked" -->
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top"
+            android:orientation="horizontal">
 
-            <CheckBox android:id="@+id/cb_travel"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_start"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <CheckBox android:id="@+id/cb_arts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:text="Arts"/>
+                <!-- android:onClick="onCheckboxArtsClicked" -->
+
+                <CheckBox android:id="@+id/cb_business"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:text="Business"/>
+                <!-- android:onClick="onCheckboxBusinessClicked" -->
+
+                <CheckBox android:id="@+id/cb_entrepreneurs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:text="Entrepreneurs"/>
+                <!-- android:onClick="onCheckboxEntrepreneursClicked" -->
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:text="Travel"/>
-            <!-- android:onClick="onCheckboxTravelClicked"-->
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <CheckBox android:id="@+id/cb_politics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:text="Politics"/>
+                <!-- android:onClick="onCheckboxPoliticsClicked"/> -->
+
+                <CheckBox android:id="@+id/cb_sports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:text="Sports"/>
+                <!-- android:onClick="onCheckboxSportsClicked" -->
+
+                <CheckBox android:id="@+id/cb_travel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:text="Travel"/>
+                <!-- android:onClick="onCheckboxTravelClicked"-->
+
+            </LinearLayout>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/searchactivity_go"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="SEARCH"
+            android:background="@color/colorPrimary"/>
+
+        <Switch
+            android:id="@+id/notif_go"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:checked="true"
+            android:padding="8dp"
+            android:text="Enable notifications (one per day)"
+            tools:visibility="visible" />
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -99,4 +149,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
