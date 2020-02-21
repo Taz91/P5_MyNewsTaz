@@ -27,6 +27,9 @@ public class SearchDoc implements Serializable
     @SerializedName("subsection_name")
     @Expose
     private String subsectionName;
+    @SerializedName("uri")
+    @Expose
+    private String uri;
 
     private final static long serialVersionUID = 648294846803604800L;
 
@@ -63,4 +66,7 @@ public class SearchDoc implements Serializable
 
     public String getSubsectionName() { return subsectionName; }
     public void setSubsectionName(String subsectionName) { this.subsectionName = subsectionName; }
+
+    public String getUri() { return uri; }
+    public void setUri(String uri) { this.uri = uri; }
 }

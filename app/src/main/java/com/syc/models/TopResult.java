@@ -1,10 +1,8 @@
 package com.syc.models;
-
 import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import static com.syc.utils.Utils.convertDate;
 
 public class TopResult implements Serializable
@@ -25,6 +23,9 @@ public class TopResult implements Serializable
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("uri")
+    @Expose
+    private String uri;
     @SerializedName("byline")
     @Expose
     private String byline;
@@ -94,6 +95,9 @@ public class TopResult implements Serializable
 
     public String getUrl() { return url; }
     public void setUrl(String url) { this.url = url; }
+
+    public String getUri() { return uri; }
+    public void setUri(String uri) { this.uri = uri; }
 
     public String getByline() { return byline; }
     public void setByline(String byline) { this.byline = byline; }

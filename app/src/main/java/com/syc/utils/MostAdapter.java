@@ -1,5 +1,7 @@
 package com.syc.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,16 +9,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.syc.DetailActivity;
 import com.syc.R;
 import com.syc.models.MostResult;
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.syc.utils.Utils.setSharedArticlesViewed;
+
 public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> {
     //list of news
     private List<MostResult> myNews;
+    //For WebView
+    private Context context;
     //Declare Glide object
     private RequestManager glide;
     private RequestOptions options = new RequestOptions()
@@ -25,10 +34,10 @@ public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> 
                 .error(R.drawable.baseline_error_outline_black_48);
     private String imgUrl;
 
-
-    public MostAdapter(List<MostResult> myNews, RequestManager glide) {
+    public MostAdapter(List<MostResult> myNews, RequestManager glide, Context context) {
         this.myNews = myNews;
         this.glide = glide;
+        this.context = context;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -75,6 +84,22 @@ public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> 
         holder.itemTitle.setText(n.getTitle());
         holder.itemDate.setText(n.getDate());
         holder.itemCategory.setText(n.getCategory());
+
+        /**
+         * Intercept click on img for read article with webView
+         */
+        holder.itemImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("articleUrl", n.getUrl());
+                // get id part of uri for example "https://nyti.ms/2GQvc0A" like "2GQvc0A"
+                setSharedArticlesViewed(n.getUri().substring(n.getUri().lastIndexOf("/")));
+
+                //intent.putExtra("articleId",n.getUri().substring(n.getUri().lastIndexOf(":")));
+                ContextCompat.startActivity(context,intent,null);
+            }
+        });
     }
 
     @Override

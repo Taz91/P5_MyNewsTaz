@@ -1,5 +1,4 @@
 package com.syc.ui;
-
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +23,7 @@ import com.syc.utils.GetNewsDataService;
 import com.syc.utils.RetrofitInstance;
 import com.syc.utils.SearchAdapter;
 import java.util.List;
+import static com.syc.utils.Utils.getApiKey;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +31,7 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
-    private static String API_KEY = "J0iJw0a8fdshubHztJsOJxEEg6hPstOG";
+    //private static String API_KEY = "J0iJw0a8fdshubHztJsOJxEEg6hPstOG";
     @BindView(R.id.rv_list)
     RecyclerView rvList;
 
@@ -69,17 +69,7 @@ public class SearchFragment extends Fragment {
 
     private void loadData() {
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
-        Call<SearchNYT> call = newsDataService.getSearchNews( API_KEY );
-                /*
-                MostPopular : 3 types (emailed/viewed/shared), periode 1,7,30j
-                https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
-                https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
-
-                Cas shared: shared type = email, facebook, twitter, periode = 1,7,30j
-                https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
-                https://api.nytimes.com/svc/mostpopular/v2/shared/1.json?api-key=yourkey
-                */
-
+        Call<SearchNYT> call = newsDataService.getSearchNews( getApiKey() );
 
         call.enqueue(new Callback<SearchNYT>(){
 
@@ -89,7 +79,7 @@ public class SearchFragment extends Fragment {
                 SearchResponse searchResponse = response.body().getResponse();
                 List<SearchDoc> result = searchResponse.getDocs();
 
-                SearchAdapter adapter = new SearchAdapter(result , Glide.with(getView()));
+                SearchAdapter adapter = new SearchAdapter(result , Glide.with(getView()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);

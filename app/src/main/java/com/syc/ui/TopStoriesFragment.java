@@ -1,5 +1,4 @@
 package com.syc.ui;
-
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +19,13 @@ import com.syc.R;
 import com.syc.models.TopResult;
 import com.syc.models.TopStoriesNYT;
 import com.syc.utils.GetNewsDataService;
-import com.syc.utils.MyAdapter;
+import com.syc.utils.TopAdapter;
 import com.syc.utils.RetrofitInstance;
 import java.util.List;
+import static com.syc.utils.Utils.getApiKey;
+import static com.syc.utils.Utils.getSharedTopStoriesCategory;
+
+//TODO : mettre les commentaires en place !!
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,7 +33,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class TopStoriesFragment extends Fragment {
-    private static String API_KEY = "J0iJw0a8fdshubHztJsOJxEEg6hPstOG";
     @BindView(R.id.rv_list)  RecyclerView rvList;
 
     public TopStoriesFragment() {
@@ -67,28 +69,22 @@ public class TopStoriesFragment extends Fragment {
     }
 
     private void loadData() {
+         /*
+        TopStories  : https://api.nytimes.com/svc/topstories/v2/science.json?api-key=yourkey
+                    : parameter = section =>    arts, business, politics, sports, travel, technology
+                                                automobiles, books,  fashion, food, health, home, insider, magazine, movies, national, tmagazine,
+                                                nyregion, obituaries, opinion,  realestate, science, sundayreview, theater, upshot, world
+        */
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
-        Call<TopStoriesNYT> call = newsDataService.getTopStoriesNew("science", API_KEY);
-                /*
-                MostPopular : 3 types (emailed/viewed/shared), periode 1,7,30j
-                https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
-                https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
-
-                Cas shared: shared type = email, facebook, twitter, periode = 1,7,30j
-                https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
-                https://api.nytimes.com/svc/mostpopular/v2/shared/1.json?api-key=yourkey
-                */
-
+        Call<TopStoriesNYT> call = newsDataService.getTopStoriesNew( getSharedTopStoriesCategory(), getApiKey() );
 
         call.enqueue(new Callback<TopStoriesNYT>(){
 
             @Override
             public void onResponse(Call<TopStoriesNYT> call, Response<TopStoriesNYT> response) {
-                //Toast.makeText(getContext(), "Yesss c'est ok", Toast.LENGTH_LONG).show();
-
                 List<TopResult> result = response.body().getResults();
 
-                MyAdapter adapter = new MyAdapter(result , Glide.with(getView()));
+                TopAdapter adapter = new TopAdapter(result , Glide.with(getView()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);
@@ -100,11 +96,8 @@ public class TopStoriesFragment extends Fragment {
                 // TODO : gestion message de retour : soit le site est inaccessible
                 // y mettre une image ou un fragment spécifique ?
 
-
                 Toast.makeText(getContext(), "Une erreur", Toast.LENGTH_LONG).show();
             }
         });
-
     }
-
 }

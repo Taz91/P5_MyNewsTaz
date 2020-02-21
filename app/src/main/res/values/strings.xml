@@ -21,4 +21,14 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="app_search">Search Articles</string>
+
+    <string-array name="spinnerListAdapter">
+        <item>Home</item>
+        <item>Arts</item>
+        <item>Business</item>
+        <item>Entrepreneurs</item>
+        <item>Politics</item>
+        <item>Sports</item>
+        <item>Travel</item>
+    </string-array>
 </resources>

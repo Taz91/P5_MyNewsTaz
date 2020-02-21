@@ -21,6 +21,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
+        //TODO: méthode deprecated !!
         super(fm);
         mContext = context;
     }

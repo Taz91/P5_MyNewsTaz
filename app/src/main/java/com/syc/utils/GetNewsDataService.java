@@ -13,6 +13,8 @@ import retrofit2.http.Query;
  * Created at 2019-10-25
  */
 public interface GetNewsDataService {
+
+    //TODO: TopStories home.json pour tout sinon arts.json ou science.json ou us.json world.json etc
     /*
     TopStories  : https://api.nytimes.com/svc/topstories/v2/science.json?api-key=yourkey
                 : parameter = section =>    arts, business, politics, sports, travel, technology
@@ -34,6 +36,8 @@ public interface GetNewsDataService {
     */
     @GET("mostpopular/v2/viewed/7.json")
     Call<MostPopularNYT> getPopularNews(@Query("api-key") String userkey);
+    //TODO: soit 1 ou 7 jours
+    //TODO: soit (emailed/viewed/shared)
     //Call<MostPopularNYT> getPopularNews(@Query("type") String type, @Query("periode") String periode, @Query("api_key") String userkey);
 
 
@@ -65,7 +69,10 @@ public interface GetNewsDataService {
     https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
     */
     @GET("search/v2/articlesearch.json")
-    Call<SearchNYT> getSearchNews(@Query("api-key") String userkey);
+    Call<SearchNYT> getSearchNews(@Query("api-key") String userkey );
+
+    //, @Query("begin_date") String beginDate
+
     //Call<MostPopularNYT> getPopularNews(@Query("type") String type, @Query("periode") String periode, @Query("api_key") String userkey);
     //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200101&end_date=20200103&facet=false&fl=web_url,lead_paragraph,pub_date,section_name,subsection_name,multimedia&fq=Sports,Arts&q=federer&sort=newest&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
 
