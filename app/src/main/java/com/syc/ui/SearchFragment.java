@@ -69,7 +69,13 @@ public class SearchFragment extends Fragment {
 
     private void loadData() {
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
-        Call<SearchNYT> call = newsDataService.getSearchNews( getApiKey() );
+
+        String fq = "Sport Arts";
+
+
+
+
+        Call<SearchNYT> call = newsDataService.getSearchNews( fq ,getApiKey() );
 
         call.enqueue(new Callback<SearchNYT>(){
 
