@@ -91,11 +91,6 @@ public class Utils {
         //Initialize TopStories Category
         setSharedTopStoriesCategory(sharedPref.getString("sharedTopStoriesCategory","home"));
 
-/*
-        if(getSharedTopStoriesCategory() == null || getSharedTopStoriesCategory().isEmpty()){
-            setSharedTopStoriesCategory("home");
-        }
-*/
         // reload with sharedPreferences modified
         sharedPref = context.getSharedPreferences(PREFS_SETTING, MODE_PRIVATE);
         return sharedPref;
@@ -195,7 +190,7 @@ public class Utils {
     }
     // ============================================================================ Notifications utilities
 
-    private final void createNotiifcation(){
+    private final void createNotification(){
         //Get NotificationManager:
         //final NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 

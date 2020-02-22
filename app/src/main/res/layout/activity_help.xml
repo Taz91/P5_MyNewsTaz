@@ -43,14 +43,14 @@
                 android:text="TopStories, choice only one : ( No choice is all item )"
                 android:layout_margin="@dimen/margin_top"/>
 
-             <Spinner
-                 android:id="@+id/helpactivity_choicemostpopularspinner"
-                 android:layout_width="match_parent"
-                 android:layout_height="20dp"
-                 android:background="@color/colorAccentTwo"
-                 android:spinnerMode="dialog"
-                 android:backgroundTint="@android:color/white">
-             </Spinner>
+            <Spinner
+             android:id="@+id/helpactivity_choicemostpopularspinner"
+             android:layout_width="match_parent"
+             android:layout_height="20dp"
+             android:background="@color/colorAccentTwo"
+             android:spinnerMode="dialog"
+             android:backgroundTint="@android:color/white">
+            </Spinner>
 
             <TextView
                 android:id="@+id/helpactivity_choicespinner"
@@ -60,9 +60,10 @@
                 android:textSize="16sp"
                 android:text="choice spinner"
                 android:layout_margin="25dp"
-                android:background="@color/colorPrimary" />
+                android:background="@color/colorPrimary"/>
 
         </LinearLayout>
+
         <Switch
             android:id="@+id/helpactivity_removesharedpref"
             android:layout_width="match_parent"
@@ -112,7 +113,6 @@
                     android:onClick="rbclick"/>
             </RadioGroup>
         </LinearLayout>
-
 
     </LinearLayout>
 

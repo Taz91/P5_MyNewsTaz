@@ -1,7 +1,6 @@
 package com.syc;
 import com.google.android.material.tabs.TabLayout;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.syc.ui.main.SectionsPagerAdapter;
 import com.google.android.material.appbar.AppBarLayout;
@@ -22,9 +21,6 @@ import static com.syc.utils.Utils.loadSharedPreferences;
 public class MainActivity extends AppCompatActivity {
     RecyclerView content;
     private String typeNews;
-    // =================================================================== shared_preferences :
-    //private SharedPreferences sharedPref;
-    //private static String apiKey;
     //====================================================================
     @BindView(R.id.main_news) CoordinatorLayout mainNews;
     @BindView(R.id.appbarlayout) AppBarLayout appBarLayout;
@@ -33,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tabs) TabLayout tabs;
     @BindView(R.id.backsearch) TextView backSearch;
     //@BindView(R.id.fab) FloatingActionButton fab;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

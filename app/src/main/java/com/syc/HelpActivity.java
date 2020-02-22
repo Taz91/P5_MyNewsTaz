@@ -48,13 +48,13 @@ public class HelpActivity extends AppCompatActivity {
         //TODO: mettre dans les ressources
         //construct liste for spinner:
         List<String> spinnerList = new ArrayList<>();
-        spinnerList.add("Home");
-        spinnerList.add("Arts");
-        spinnerList.add("Business");
-        spinnerList.add("Entrepreneurs");
-        spinnerList.add("Politics");
-        spinnerList.add("Sports");
-        spinnerList.add("Travel");
+        spinnerList.add("home");
+        spinnerList.add("arts");
+        spinnerList.add("business");
+        spinnerList.add("entrepreneurs");
+        spinnerList.add("politics");
+        spinnerList.add("sports");
+        spinnerList.add("travel");
 
         ArrayAdapter<String> spinnerListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, spinnerList);
         spinnerListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
