@@ -31,7 +31,6 @@ import static com.syc.utils.Utils.getApiKey;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
-    //private static String API_KEY = "J0iJw0a8fdshubHztJsOJxEEg6hPstOG";
     @BindView(R.id.rv_list)
     RecyclerView rvList;
 

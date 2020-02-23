@@ -11,7 +11,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.ButterKnife;
 import butterknife.BindView;
@@ -27,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.view_pager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabs;
-    @BindView(R.id.backsearch) TextView backSearch;
     //@BindView(R.id.fab) FloatingActionButton fab;
 
     @Override
@@ -35,12 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        // ========================================================== sharedPreferences
-        // load sharedPreferences and use for Default display
-        //sharedPref = loadSharedPreferences(this);
 
         loadSharedPreferences(this);
-
 
         setSupportActionBar(toolbar);
         //Tabs :
@@ -64,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
             if(data != null  ){
                 //test if value exist
                 if(data.hasExtra("wordDefault")){
-                    String monTest = data.getStringExtra("wordDefault");
-                    backSearch.setText(data.getStringExtra("wordDefault"));
                 /*
                     field-name:("value1" "value2" ... "value n")
                     field-name-1:("value1") AND field-name-2:("value2" "value3")
