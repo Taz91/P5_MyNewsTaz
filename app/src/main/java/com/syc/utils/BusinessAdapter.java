@@ -11,7 +11,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.syc.DetailActivity;
 import com.syc.R;
-import com.syc.models.SearchDoc;
+import com.syc.models.BusinessDoc;
 import java.util.List;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,9 +20,9 @@ import butterknife.ButterKnife;
 
 import static com.syc.utils.Utils.setSharedArticlesViewed;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder> {
+public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.MyViewHolder> {
     //list of news
-    private List<SearchDoc> myNews;
+    private List<BusinessDoc> myNews;
     //Declare Glide object
     private RequestManager glide;
     private RequestOptions options = new RequestOptions()
@@ -33,7 +33,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     //For WebView
     private Context context;
 
-    public SearchAdapter(List<SearchDoc> myNews, RequestManager glide, Context context) {
+    public BusinessAdapter(List<BusinessDoc> myNews, RequestManager glide, Context context) {
         this.myNews = myNews;
         this.glide = glide;
         this.context = context;
@@ -65,7 +65,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        SearchDoc n = myNews.get(position);
+        BusinessDoc n = myNews.get(position);
         imgUrl = "";
         // binding ItemView
         //picture

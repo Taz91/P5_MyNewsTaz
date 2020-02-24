@@ -1,7 +1,6 @@
 package com.syc.utils;
-
+import com.syc.models.BusinessNYT;
 import com.syc.models.MostPopularNYT;
-import com.syc.models.SearchNYT;
 import com.syc.models.TopStoriesNYT;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -13,7 +12,12 @@ import retrofit2.http.Query;
  * Created at 2019-10-25
  */
 public interface GetNewsDataService {
-
+    /**
+     *
+     * @param section - home / arts / business / entrepreneurs / politics / sports / travel
+     * @param userkey
+     * @return
+     */
     @GET("topstories/v2/{section}.json" )
     Call<TopStoriesNYT> getTopStoriesNew(@Path("section") String section, @Query("api-key") String userkey );
 
@@ -36,8 +40,6 @@ public interface GetNewsDataService {
      * @GET("mostpopular/v2/shared/{type}/{periode}.json")
      * Call<MostPopularNYT> getPopularNews(@Path("periode") String periode, @Path("typesocial") String typesocial, @Query("api_key") String userkey);
     */
-
-
 
     /*
     Search : 3 type de paramêtres :
@@ -67,7 +69,7 @@ public interface GetNewsDataService {
     https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
     */
     @GET("search/v2/articlesearch.json")
-    Call<SearchNYT> getSearchNews(@Query("fq") String fq,@Query("api-key") String userkey );
+    Call<BusinessNYT> getBusinessNews(@Query("fq") String fq, @Query("api-key") String userkey );
 
     //, @Query("begin_date") String beginDate
     //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200101&end_date=20200103&facet=false&fl=web_url,lead_paragraph,pub_date,section_name,subsection_name,multimedia&fq=Sports,Arts&q=federer&sort=newest&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG

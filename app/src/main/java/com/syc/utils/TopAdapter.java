@@ -1,5 +1,4 @@
 package com.syc.utils;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.RequestManager;
-
 import static com.syc.utils.Utils.setSharedArticlesViewed;
 
 public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
@@ -107,6 +105,11 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("articleUrl", n.getUrl());
                 // get id part of uri for example "https://nyti.ms/2GQvc0A" like "2GQvc0A"
+
+                String maVar = n.getUri() ;
+                maVar = n.getUri().substring(n.getUri().lastIndexOf("/")) ;
+
+
                 setSharedArticlesViewed(n.getUri().substring(n.getUri().lastIndexOf("/")));
 
                 //intent.putExtra("articleId",n.getUri().substring(n.getUri().lastIndexOf(":")));

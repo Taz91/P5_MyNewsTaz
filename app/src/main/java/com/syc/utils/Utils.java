@@ -16,7 +16,7 @@ public class Utils {
     //define key : apiKey
     private static final String PREFS_APIKEY = "apiKey";
     //ArticlesViewedKey
-    private static final String PREFS_ARTICLESVIEWED = "articlesviewedKey";
+    private static final String PREFS_ARTICLESVIEWED = "articleViewed";
     //Access apiKey
     private static String apiKey;
     //Articles viewed
@@ -120,11 +120,41 @@ public class Utils {
 
     public static String getSharedArticlesViewed() { return sharedArticlesViewed; }
     public static void setSharedArticlesViewed(String pArticlesViewed) {
-        sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + ":" + pArticlesViewed;
+        if(sharedPref.getString(PREFS_ARTICLESVIEWED,"").isEmpty()){
+            sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + pArticlesViewed;
+        }else{
+            // explode la chaine, si > x elements alors il faudrat garder uniquement les xx derniers
+            Integer nbArticlesSave = sharedPref.getInt("nbArticles",30) ;
+            String[] splitSharedArticlesViewed = sharedArticlesViewed.split(":") ;
+            if(splitSharedArticlesViewed.length > nbArticlesSave){
+                //reconstituer avec le 1er en moins
+                Integer index = 1;
+                String newSharedArticlesViewed = "";
+                while(index < nbArticlesSave){
+                    if(newSharedArticlesViewed.isEmpty()){
+                        newSharedArticlesViewed = splitSharedArticlesViewed[index];
+                    }else{
+                        newSharedArticlesViewed = newSharedArticlesViewed + ":" + splitSharedArticlesViewed[index];
+                    }
+
+
+                }
+
+
+            }
+
+
+            sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + ":" + pArticlesViewed;
+        }
+
+
+
+
+
 
         sharedPref
                 .edit()
-                .putString("articleViewed", sharedArticlesViewed)
+                .putString(PREFS_ARTICLESVIEWED, sharedArticlesViewed)
                 .commit();
     }
 

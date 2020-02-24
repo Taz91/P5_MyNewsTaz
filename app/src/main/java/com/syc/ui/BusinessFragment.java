@@ -16,30 +16,30 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.syc.R;
-import com.syc.models.SearchDoc;
-import com.syc.models.SearchNYT;
-import com.syc.models.SearchResponse;
+import com.syc.models.BusinessDoc;
+import com.syc.models.BusinessNYT;
+import com.syc.models.BusinessResponse;
+import com.syc.utils.BusinessAdapter;
 import com.syc.utils.GetNewsDataService;
 import com.syc.utils.RetrofitInstance;
-import com.syc.utils.SearchAdapter;
 import java.util.List;
 import static com.syc.utils.Utils.getApiKey;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SearchFragment#newInstance} factory method to
+ * Use the {@link BusinessFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment {
+public class BusinessFragment extends Fragment {
     @BindView(R.id.rv_list)
     RecyclerView rvList;
 
-      public SearchFragment() {
+      public BusinessFragment() {
         // Required empty public constructor
     }
 
-    public static SearchFragment newInstance() {
-        SearchFragment fragment = new SearchFragment();
+    public static BusinessFragment newInstance() {
+        BusinessFragment fragment = new BusinessFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -54,7 +54,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_search, container, false);
+        View v =  inflater.inflate(R.layout.fragment_business, container, false);
         ButterKnife.bind(this, v);
         return v;
     }
@@ -74,17 +74,17 @@ public class SearchFragment extends Fragment {
 
 
 
-        Call<SearchNYT> call = newsDataService.getSearchNews( fq ,getApiKey() );
+        Call<BusinessNYT> call = newsDataService.getBusinessNews( fq ,getApiKey() );
 
-        call.enqueue(new Callback<SearchNYT>(){
+        call.enqueue(new Callback<BusinessNYT>(){
 
             @Override
-            public void onResponse(Call<SearchNYT> call, Response<SearchNYT> response) {
+            public void onResponse(Call<BusinessNYT> call, Response<BusinessNYT> response) {
 
-                SearchResponse searchResponse = response.body().getResponse();
-                List<SearchDoc> result = searchResponse.getDocs();
+                BusinessResponse businessResponse = response.body().getResponse();
+                List<BusinessDoc> result = businessResponse.getDocs();
 
-                SearchAdapter adapter = new SearchAdapter(result , Glide.with(getView()), getContext());
+                BusinessAdapter adapter = new BusinessAdapter(result , Glide.with(getView()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);
@@ -92,7 +92,7 @@ public class SearchFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<SearchNYT> call, Throwable t) {
+            public void onFailure(Call<BusinessNYT> call, Throwable t) {
                 // TODO : gestion message de retour : soit le site est inaccessible
                 // y mettre une image ou un fragment spécifique ?
 

@@ -1,10 +1,9 @@
 package com.syc.models;
-
 import java.io.Serializable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SearchNYT implements Serializable
+public class BusinessNYT implements Serializable
 {
 
     @SerializedName("status")
@@ -15,7 +14,7 @@ public class SearchNYT implements Serializable
     private String copyright;
     @SerializedName("response")
     @Expose
-    private SearchResponse response;
+    private BusinessResponse response;
     private final static long serialVersionUID = -8238918989386938658L;
 
     public String getStatus() { return status; }
@@ -24,7 +23,7 @@ public class SearchNYT implements Serializable
     public String getCopyright() { return copyright; }
     public void setCopyright(String copyright) { this.copyright = copyright; }
 
-    public SearchResponse getResponse() { return response; }
-    public void setResponse(SearchResponse response) { this.response = response; }
+    public BusinessResponse getResponse() { return response; }
+    public void setResponse(BusinessResponse response) { this.response = response; }
 
 }
