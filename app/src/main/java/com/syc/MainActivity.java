@@ -1,26 +1,33 @@
 package com.syc;
 import com.google.android.material.tabs.TabLayout;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.syc.ui.main.SectionsPagerAdapter;
 import com.google.android.material.appbar.AppBarLayout;
+import com.syc.utils.NotificationWorker;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.viewpager.widget.ViewPager;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import static com.syc.utils.Utils.loadSetting;
 import static com.syc.utils.Utils.loadSharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
-    RecyclerView content;
-    private String typeNews;
-    //====================================================================
+    //TODO: delete next line
+    //RecyclerView content;
+    //private String typeNews;
+
+    // =================================================================== shared_preferences :
+    private SharedPreferences sharedPref;
+    //==================================================================== view
     @BindView(R.id.main_news) CoordinatorLayout mainNews;
     @BindView(R.id.appbarlayout) AppBarLayout appBarLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -34,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        loadSharedPreferences(this);
+        // ========================================================== sharedPreferences
+        // load sharedPreferences and use for Default display
+        sharedPref = loadSharedPreferences(this);
 
         setSupportActionBar(toolbar);
         //Tabs :
@@ -54,10 +63,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //TODO : back searchActivity with NOTIF form option
+        // =================================================================================================== back searchActivity - option NOTIF
         if(resultCode==1){
             if(data != null  ){
+                if(data.getBooleanExtra("switchNotif", false)){
+                    WorkManager mWorkManager = WorkManager.getInstance();
+                    OneTimeWorkRequest mRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class).build();
+                    mWorkManager.enqueue(mRequest);
+                }
                 //test if value exist
                 if(data.hasExtra("wordDefault")){
+
+
+
+
+
+
+
                 /*
                     field-name:("value1" "value2" ... "value n")
                     field-name-1:("value1") AND field-name-2:("value2" "value3")
@@ -71,12 +95,28 @@ public class MainActivity extends AppCompatActivity {
 
                     String maVarTest = "";
                     if(!data.getStringExtra("wordDefault").isEmpty()){
+                        //data.getStringExtra("wordDefault");
 
                     }
                 }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        // =================================================================================================== back searchActivity - option SEARCH
+        if(resultCode==2){
+            // récupérer les params de la recherche et lancer une activity recherche !!
+            // faire l'activity recherche
+            //
+
+        }
+        // =================================================================================================== back helpActivity
+        if(resultCode==3){
+            if(data != null  ){
+                if(data.getBooleanExtra("bModif", false)){
+                    // reload sharedPreferences if necessary
+                    sharedPref = loadSharedPreferences(this);
+                }
+            }
+        }
     }
 
     @Override
@@ -98,10 +138,10 @@ public class MainActivity extends AppCompatActivity {
                 callNotificationParams(2);
                 return true;
             case R.id.menu_help:
-                //TODO: faire mini activity avec param TopStories - choix section
-                Intent searchActivityIntent = new Intent(MainActivity.this, HelpActivity.class);
-                searchActivityIntent.putExtra("MenuHelp", "");
-                startActivityForResult(searchActivityIntent, 3);
+                Intent helpIntent = new Intent(MainActivity.this, HelpActivity.class);
+                helpIntent.putExtra("bmodif", false);
+
+                startActivityForResult(helpIntent, 3);
                 return true;
             case R.id.menu_about:
                 //TODO: faire mini activity avec mode emploi appli
@@ -131,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //TODO : use utils to nows if Artickle is viewed
+    //TODO : use utils to nows if Article is viewed
 
     /**
      *

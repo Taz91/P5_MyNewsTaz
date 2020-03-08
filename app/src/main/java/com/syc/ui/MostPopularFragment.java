@@ -90,7 +90,6 @@ public class MostPopularFragment extends Fragment {
 
             @Override
             public void onResponse(Call<MostPopularNYT> call, Response<MostPopularNYT> response) {
-                //Toast.makeText(getContext(), "Yesss c'est ok", Toast.LENGTH_LONG).show();
 
                 List<MostResult> result = response.body().getResults()  ; //getResults();
 

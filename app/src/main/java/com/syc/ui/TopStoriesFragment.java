@@ -71,9 +71,8 @@ public class TopStoriesFragment extends Fragment {
     private void loadData() {
          /*
         TopStories  : https://api.nytimes.com/svc/topstories/v2/science.json?api-key=yourkey
-                    : parameter = section =>    arts, business, politics, sports, travel, technology
-                                                automobiles, books,  fashion, food, health, home, insider, magazine, movies, national, tmagazine,
-                                                nyregion, obituaries, opinion,  realestate, science, sundayreview, theater, upshot, world
+                    : parameter = section => arts, automobiles, books, business, fashion, food, health, home, insider, magazine, movies, nyregion, obituaries,
+                                             opinion, politics, realestate, science, sports, sundayreview, technology, theater, t-magazine, travel, upshot, us, world
         */
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
         Call<TopStoriesNYT> call = newsDataService.getTopStoriesNew( getSharedTopStoriesCategory(), getApiKey() );

@@ -91,34 +91,38 @@
         </LinearLayout>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_toplow"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_start"
                 android:layout_weight="1"
                 android:orientation="vertical">
-                <CheckBox android:id="@+id/cb_arts"
+
+                <CheckBox
+                    android:id="@+id/cb_arts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_toplow"
-                    android:text="Arts"/>
+                    android:text="Arts" />
                 <!-- android:onClick="onCheckboxArtsClicked" -->
-                <CheckBox android:id="@+id/cb_business"
+                <CheckBox
+                    android:id="@+id/cb_business"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_toplow"
-                    android:text="Business"/>
+                    android:text="Business" />
                 <!-- android:onClick="onCheckboxBusinessClicked" -->
-                <CheckBox android:id="@+id/cb_entrepreneurs"
+                <CheckBox
+                    android:id="@+id/cb_movies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_toplow"
-                    android:text="Entrepreneurs"/>
+                    android:text="Movies" />
                 <!-- android:onClick="onCheckboxEntrepreneursClicked" -->
             </LinearLayout>
             <LinearLayout

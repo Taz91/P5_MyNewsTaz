@@ -24,96 +24,120 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical">
+    <!-- TopStories Spinner -->
     <LinearLayout
+        android:id="@+id/helpactivity_topstories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/helpactivity_topstories_spinner_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="TopStories, choice only one : ( No choice is all item )"
+            android:layout_margin="@dimen/margin_top"/>
+        <Spinner
+            android:id="@+id/helpactivity_topstories_spinner_choice"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/colorAccentTwo"
+            android:spinnerMode="dialog"
+            android:backgroundTint="@android:color/white">
+        </Spinner>
+    </LinearLayout>
+    <!-- SharedPref remove -->
+    <LinearLayout
+        android:id="@+id/helpactivity_remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/helpactivity_choicemostpopularlabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="TopStories, choice only one : ( No choice is all item )"
-                android:layout_margin="@dimen/margin_top"/>
-
-            <Spinner
-             android:id="@+id/helpactivity_choicemostpopularspinner"
-             android:layout_width="match_parent"
-             android:layout_height="20dp"
-             android:background="@color/colorAccentTwo"
-             android:spinnerMode="dialog"
-             android:backgroundTint="@android:color/white">
-            </Spinner>
-
-            <TextView
-                android:id="@+id/helpactivity_choicespinner"
-                android:layout_weight="1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="choice spinner"
-                android:layout_margin="25dp"
-                android:background="@color/colorPrimary"/>
-
-        </LinearLayout>
-
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
         <Switch
-            android:id="@+id/helpactivity_removesharedpref"
+            android:id="@+id/helpactivity_remove_sharedpref"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:checked="false"
             android:padding="8dp"
             android:text="Remove Preferences parameters"
+            android:textSize="16sp"
             tools:visibility="visible" />
         <LinearLayout
+            android:id="@+id/helpactivity_remove_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/helpactivity_removelabel"
+                android:id="@+id/helpactivity_remove_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Confirm remove : "
                 android:layout_marginLeft="90dp"
-                android:visibility="invisible"
-                android:background="@color/cardview_shadow_end_color" />
-
+                android:background="@color/cardview_shadow_end_color"
+                android:text="Confirm remove : "
+                android:textSize="16sp"
+                android:visibility="invisible" />
             <RadioGroup
-                android:id="@+id/helpactivity_confirm_rg"
+                android:id="@+id/helpactivity_remove_confirm_rg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:orientation="horizontal">
-
+                android:orientation="horizontal"
+                android:visibility="invisible">
                 <RadioButton
-                    android:id="@+id/helpactivity_confirm_no"
+                    android:id="@+id/helpactivity_remove_confirm_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:text="No"
                     android:checked="true"
-                    android:onClick="rbclick"/>
+                    android:onClick="rbclick"
+                    android:text="No" />
                 <RadioButton
-                    android:id="@+id/helpactivity_confirm_yes"
+                    android:id="@+id/helpactivity_remove_confirm_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:text="Yes"
                     android:checked="false"
-                    android:onClick="rbclick"/>
+                    android:onClick="rbclick"
+                    android:text="Yes" />
             </RadioGroup>
         </LinearLayout>
-
     </LinearLayout>
+    <!-- nb ArticleViewed - spinner -->
+    <LinearLayout
+        android:id="@+id/helpactivity_articleviewed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/helpactivity_articlesviewed_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="History of Articles viewed, ( Default 30 )"
+                android:layout_margin="@dimen/margin_top"/>
+            <Spinner
+                android:id="@+id/helpactivity_articlesviewed_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/colorAccentTwo"
+                android:spinnerMode="dialog"
+                android:backgroundTint="@android:color/white">
+            </Spinner>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

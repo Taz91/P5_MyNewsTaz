@@ -1,5 +1,4 @@
 package com.syc.utils;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,12 +12,10 @@ import com.syc.DetailActivity;
 import com.syc.R;
 import com.syc.models.MostResult;
 import java.util.List;
-
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 import static com.syc.utils.Utils.setSharedArticlesViewed;
 
 public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> {

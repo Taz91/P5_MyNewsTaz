@@ -1,12 +1,10 @@
 package com.syc.utils;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import static android.content.Context.MODE_PRIVATE;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class Utils {
     public static SharedPreferences sharedPref;
@@ -25,7 +23,8 @@ public class Utils {
     private static String sharedTopStoriesCategory;
     //Remove SharedPref
     private static Boolean bRemoveSharedPref;
-
+    //nb Articles Viewed
+    private static Integer nArticlesMax;
 
     //TODO: SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //TODO: regarder quelle est la date qui arrive ... est ce long en millisecondes ?
@@ -70,6 +69,16 @@ public class Utils {
     public static Boolean getbRemoveSharedPref() { return bRemoveSharedPref; }
     public static void setbRemoveSharedPref(Boolean bRemoveSharedPref) { Utils.bRemoveSharedPref = bRemoveSharedPref; }
 
+    public static Integer getnArticlesMax() { return nArticlesMax; }
+    public static void setnArticlesMax(Integer nArticlesMax) {
+        Utils.nArticlesMax = nArticlesMax;
+        sharedPref
+            .edit()
+            .putInt("nbArticles", nArticlesMax)
+            .commit();
+    }
+
+
     /**
      * load sharedPreferences
      * @param context
@@ -90,7 +99,8 @@ public class Utils {
         }
         //Initialize TopStories Category
         setSharedTopStoriesCategory(sharedPref.getString("sharedTopStoriesCategory","home"));
-
+        //Initialize nArticlesViewed
+        setnArticlesMax(sharedPref.getInt("nbArticles", 30));
         // reload with sharedPreferences modified
         sharedPref = context.getSharedPreferences(PREFS_SETTING, MODE_PRIVATE);
         return sharedPref;
@@ -106,13 +116,13 @@ public class Utils {
             psearchActivityIntent.putExtra("wordDefault", sharedPref.getString("wordDefault",""));
             psearchActivityIntent.putExtra("cbArts", sharedPref.getBoolean("cbArts", false));
             psearchActivityIntent.putExtra("cbBusiness", sharedPref.getBoolean("cbBusiness", false));
-            psearchActivityIntent.putExtra("cbEntrepreneur", sharedPref.getBoolean("cbEntrepreneur", false));
+            psearchActivityIntent.putExtra("cbMovies", sharedPref.getBoolean("cbMovies", false));
             psearchActivityIntent.putExtra("cbPolitics", sharedPref.getBoolean("cbPolitics", false));
             psearchActivityIntent.putExtra("cbSport", sharedPref.getBoolean("cbSport", false));
             psearchActivityIntent.putExtra("cbTravel", sharedPref.getBoolean("cbTravel", false));
             psearchActivityIntent.putExtra("switchNotif", sharedPref.getBoolean("switchNotif", false));
             psearchActivityIntent.putExtra("articleViewed", sharedPref.getString("articleViewed", ""));
-            psearchActivityIntent.putExtra("nbArticle", sharedPref.getInt("nbArticle", 30));
+            psearchActivityIntent.putExtra("nbArticles", sharedPref.getInt("nbArticles", 30));
         }else {
             sharedPrefLoadDefault();
         }
@@ -124,7 +134,7 @@ public class Utils {
             sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + pArticlesViewed;
         }else{
             // explode la chaine, si > x elements alors il faudrat garder uniquement les xx derniers
-            Integer nbArticlesSave = sharedPref.getInt("nbArticles",30) ;
+            Integer nbArticlesSave = getnArticlesMax();//sharedPref.getInt("nbArticles",30) ;
             String[] splitSharedArticlesViewed = sharedArticlesViewed.split(":") ;
             if(splitSharedArticlesViewed.length > nbArticlesSave){
                 //reconstituer avec le 1er en moins
@@ -134,24 +144,13 @@ public class Utils {
                     if(newSharedArticlesViewed.isEmpty()){
                         newSharedArticlesViewed = splitSharedArticlesViewed[index];
                     }else{
-                        newSharedArticlesViewed = newSharedArticlesViewed + ":" + splitSharedArticlesViewed[index];
+                        newSharedArticlesViewed += ":" + splitSharedArticlesViewed[index];
                     }
-
-
+                    index++;
                 }
-
-
             }
-
-
             sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + ":" + pArticlesViewed;
         }
-
-
-
-
-
-
         sharedPref
                 .edit()
                 .putString(PREFS_ARTICLESVIEWED, sharedArticlesViewed)
@@ -181,12 +180,12 @@ public class Utils {
             .putString("wordDefault", "trump macron")
             .putBoolean("cbArts",false)
             .putBoolean("cbBusiness",true)
-            .putBoolean("cbEntrepreneur",false)
+            .putBoolean("cbMovies",false)
             .putBoolean("cbPolitics",false)
             .putBoolean("cbSport",true)
             .putBoolean("cbTravel",false)
             .putBoolean("switchNotif",false)
-            .putInt("nbArticle", 30)
+            .putInt("nbArticles", 30)
             .putString("sharedTopStoriesCategory", "home")
             .putBoolean("bRemoveSharedPref", false)
             .commit();
@@ -205,15 +204,15 @@ public class Utils {
                 .remove("wordDefault")
                 .remove("cbArts")
                 .remove("cbBusiness")
-                .remove("cbEntrepreneur")
+                .remove("cbMovies")
                 .remove("cbPolitics")
                 .remove("cbSport")
                 .remove("cbTravel")
                 .remove("switchNotif")
-                .remove("nbArticle")
+                .remove("nbArticles")
                 .remove("sharedTopStoriesCategory")
-                .remove("sharedTopStoriesChoiceCategory")
-                .remove("sTopStoriesCategory")
+                .remove("nbArticle")
+                .remove("cbEntrepreneurs")
                 .commit();
         setbRemoveSharedPref(false);
         sharedPrefLoadDefault();
@@ -226,6 +225,5 @@ public class Utils {
 
         //NotificationManager notificationManagerNew = mContext.getSystemService(NotificationManager.class);
     }
-
 
 }
