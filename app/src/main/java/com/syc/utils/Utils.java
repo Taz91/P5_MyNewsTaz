@@ -1,9 +1,22 @@
 package com.syc.utils;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+
+import com.syc.R;
+import com.syc.models.NotificationResponse;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import androidx.core.app.NotificationCompat;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class Utils {
@@ -25,6 +38,9 @@ public class Utils {
     private static Boolean bRemoveSharedPref;
     //nb Articles Viewed
     private static Integer nArticlesMax;
+    //nb Hits return
+    private static Integer nNbHits;
+
 
     //TODO: SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //TODO: regarder quelle est la date qui arrive ... est ce long en millisecondes ?
@@ -38,9 +54,11 @@ public class Utils {
      * @param pDate
      * @return
      */
-    public static String convertDate(String pDate){
-        SimpleDateFormat oldFormatDate = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat newFormatDate = new SimpleDateFormat("dd/MM/yyyy");
+    public static String convertDate(String pDate, String pOldFormat, String pNewFormat){
+        SimpleDateFormat oldFormatDate = new SimpleDateFormat(pOldFormat);
+        SimpleDateFormat newFormatDate = new SimpleDateFormat(pNewFormat);
+        //SimpleDateFormat oldFormatDate = new SimpleDateFormat("yyyy-MM-dd");
+        //SimpleDateFormat newFormatDate = new SimpleDateFormat("dd/MM/yyyy");
 
         pDate = pDate.substring(0,10);
         try {
@@ -78,6 +96,22 @@ public class Utils {
             .commit();
     }
 
+    public static void setsBeginDate(String pBeginDate) {
+        sharedPref
+            .edit()
+            .putString("NotifLastDate", pBeginDate)
+            .commit();
+    }
+
+    public static Integer getnNbHits(){return nNbHits;}
+    public static void setnNbHits(Integer pHits){
+        Utils.nNbHits = pHits;
+        sharedPref
+                .edit()
+                .putInt("nNbHits", pHits)
+                .commit();
+    }
+
 
     /**
      * load sharedPreferences
@@ -109,20 +143,38 @@ public class Utils {
     /**
      * load Setting Notif and Search for activity
      * @param psearchActivityIntent
+     * @param pGet true to put sharedpref in intent, false to put intent in sharedpref
      */
-    public static void loadSetting(Intent psearchActivityIntent ){
+    public static void loadSetting(Intent psearchActivityIntent, Boolean pGet ){
         apiKey = sharedPref.getString( PREFS_APIKEY , "" );
         if(sharedPref != null){
-            psearchActivityIntent.putExtra("wordDefault", sharedPref.getString("wordDefault",""));
-            psearchActivityIntent.putExtra("cbArts", sharedPref.getBoolean("cbArts", false));
-            psearchActivityIntent.putExtra("cbBusiness", sharedPref.getBoolean("cbBusiness", false));
-            psearchActivityIntent.putExtra("cbMovies", sharedPref.getBoolean("cbMovies", false));
-            psearchActivityIntent.putExtra("cbPolitics", sharedPref.getBoolean("cbPolitics", false));
-            psearchActivityIntent.putExtra("cbSport", sharedPref.getBoolean("cbSport", false));
-            psearchActivityIntent.putExtra("cbTravel", sharedPref.getBoolean("cbTravel", false));
-            psearchActivityIntent.putExtra("switchNotif", sharedPref.getBoolean("switchNotif", false));
-            psearchActivityIntent.putExtra("articleViewed", sharedPref.getString("articleViewed", ""));
-            psearchActivityIntent.putExtra("nbArticles", sharedPref.getInt("nbArticles", 30));
+            if(pGet){
+                psearchActivityIntent.putExtra("wordDefault", sharedPref.getString("wordDefault",""));
+                psearchActivityIntent.putExtra("cbArts", sharedPref.getBoolean("cbArts", false));
+                psearchActivityIntent.putExtra("cbBusiness", sharedPref.getBoolean("cbBusiness", false));
+                psearchActivityIntent.putExtra("cbMovies", sharedPref.getBoolean("cbMovies", false));
+                psearchActivityIntent.putExtra("cbPolitics", sharedPref.getBoolean("cbPolitics", false));
+                psearchActivityIntent.putExtra("cbSport", sharedPref.getBoolean("cbSport", false));
+                psearchActivityIntent.putExtra("cbTravel", sharedPref.getBoolean("cbTravel", false));
+                psearchActivityIntent.putExtra("switchNotif", sharedPref.getBoolean("switchNotif", false));
+                psearchActivityIntent.putExtra("articleViewed", sharedPref.getString("articleViewed", ""));
+                psearchActivityIntent.putExtra("nbArticles", sharedPref.getInt("nbArticles", 30));
+                psearchActivityIntent.putExtra("fq", sharedPref.getString("fq", ""));
+            }else {
+                sharedPref
+                    .edit()
+                    .putString("wordDefault", psearchActivityIntent.getStringExtra("wordDefault"))
+                    .putBoolean("cbArts",psearchActivityIntent.getBooleanExtra("cbArts",false))
+                    .putBoolean("cbBusiness",psearchActivityIntent.getBooleanExtra("cbBusiness",false))
+                    .putBoolean("cbMovies",psearchActivityIntent.getBooleanExtra("cbMovies",false))
+                    .putBoolean("cbPolitics",psearchActivityIntent.getBooleanExtra("cbPolitics",false))
+                    .putBoolean("cbSport",psearchActivityIntent.getBooleanExtra("cbSport",false))
+                    .putBoolean("cbTravel",psearchActivityIntent.getBooleanExtra("cbTravel",false))
+                    .putBoolean("switchNotif",psearchActivityIntent.getBooleanExtra("switchNotif",false))
+                    .putString("fq",psearchActivityIntent.getStringExtra("fq"))
+                    .commit();
+
+            }
         }else {
             sharedPrefLoadDefault();
         }
@@ -174,7 +226,6 @@ public class Utils {
     private static void sharedPrefLoadDefault(){
         sharedPref
             .edit()
-            .remove("articleViewed")
             .putString("apiKey","J0iJw0a8fdshubHztJsOJxEEg6hPstOG")
             .putString("articleViewed", "")
             .putString("wordDefault", "trump macron")
@@ -188,6 +239,9 @@ public class Utils {
             .putInt("nbArticles", 30)
             .putString("sharedTopStoriesCategory", "home")
             .putBoolean("bRemoveSharedPref", false)
+            .putString("NotifLastDate","")
+            .putInt("NotifNbOf", 0)
+            .putString("fq","")
             .commit();
     }
 
@@ -211,19 +265,12 @@ public class Utils {
                 .remove("switchNotif")
                 .remove("nbArticles")
                 .remove("sharedTopStoriesCategory")
-                .remove("nbArticle")
-                .remove("cbEntrepreneurs")
+                .remove("NotifLastDate")
+                .remove("NotifNbOf")
+                .remove("fq")
                 .commit();
         setbRemoveSharedPref(false);
         sharedPrefLoadDefault();
-    }
-    // ============================================================================ Notifications utilities
-
-    private final void createNotification(){
-        //Get NotificationManager:
-        //final NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        //NotificationManager notificationManagerNew = mContext.getSystemService(NotificationManager.class);
     }
 
 }

@@ -77,7 +77,7 @@ public class TopResult implements Serializable
         this.category = ("".equals(getSubsection())) ? this.getSection() : this.getSection() + " > " + this.getSubsection();
         return this.category; };
     public String getDate(){
-        this.dateString = convertDate( this.getPublishedDate() );
+        this.dateString = convertDate( this.getPublishedDate(),"yyyy-MM-dd" , "dd/MM/yyyy" );
         return this.dateString;
     }
 

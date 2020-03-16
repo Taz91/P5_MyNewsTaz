@@ -1,6 +1,7 @@
 package com.syc.utils;
 import com.syc.models.BusinessNYT;
 import com.syc.models.MostPopularNYT;
+import com.syc.models.NotificationLowData;
 import com.syc.models.TopStoriesNYT;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -13,7 +14,7 @@ import retrofit2.http.Query;
  */
 public interface GetNewsDataService {
     /**
-     *
+     * TopStories
      * @param section - home / arts / business / entrepreneurs / politics / sports / travel
      * @param userkey
      * @return
@@ -74,4 +75,9 @@ public interface GetNewsDataService {
     //, @Query("begin_date") String beginDate
     //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200101&end_date=20200103&facet=false&fl=web_url,lead_paragraph,pub_date,section_name,subsection_name,multimedia&fq=Sports,Arts&q=federer&sort=newest&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
 
+    // Notification low data !!!
+    @GET("search/v2/articlesearch.json")
+    Call<NotificationLowData> getNotifLowData(@Query("begin_date") String begin_date, @Query("fl") String fl, @Query("fq") String fq, @Query("q") String q, @Query("api-key") String userkey );
+    //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200301&fl=hits&fq=macron&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
+    //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200301&end_date=20200315&fl=hits&fq=Arts Business Movies Sports Travel Politcs&q=corona virus france&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
 }

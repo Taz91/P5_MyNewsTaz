@@ -3,28 +3,38 @@ import com.google.android.material.tabs.TabLayout;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import com.syc.models.NotificationLowData;
+import com.syc.models.NotificationResponse;
 import com.syc.ui.main.SectionsPagerAdapter;
 import com.google.android.material.appbar.AppBarLayout;
+import com.syc.utils.GetNewsDataService;
 import com.syc.utils.NotificationWorker;
+import com.syc.utils.RetrofitInstance;
+import com.syc.utils.Utils;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import androidx.viewpager.widget.ViewPager;
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import butterknife.ButterKnife;
 import butterknife.BindView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import static com.syc.utils.Utils.getApiKey;
 import static com.syc.utils.Utils.loadSetting;
 import static com.syc.utils.Utils.loadSharedPreferences;
+import static com.syc.utils.Utils.setnNbHits;
 
 public class MainActivity extends AppCompatActivity {
-    //TODO: delete next line
-    //RecyclerView content;
-    //private String typeNews;
-
     // =================================================================== shared_preferences :
     private SharedPreferences sharedPref;
     //==================================================================== view
@@ -40,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         // ========================================================== sharedPreferences
         // load sharedPreferences and use for Default display
         sharedPref = loadSharedPreferences(this);
@@ -67,38 +76,55 @@ public class MainActivity extends AppCompatActivity {
         //TODO : back searchActivity with NOTIF form option
         // =================================================================================================== back searchActivity - option NOTIF
         if(resultCode==1){
-            if(data != null  ){
-                if(data.getBooleanExtra("switchNotif", false)){
-                    WorkManager mWorkManager = WorkManager.getInstance();
-                    OneTimeWorkRequest mRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class).build();
-                    mWorkManager.enqueue(mRequest);
+            if( data != null ){
+                // ========================================================== sharedPreferences
+                // put in sharedPrefs
+                loadSetting(data,false);
+
+                if( data.getBooleanExtra("switchNotif", false )){
+                    creatNotification(true);
+                }else{
+                    creatNotification(false);
                 }
-                //test if value exist
-                if(data.hasExtra("wordDefault")){
-
-
-
-
-
-
 
                 /*
-                    field-name:("value1" "value2" ... "value n")
-                    field-name-1:("value1") AND field-name-2:("value2" "value3")
-                    fq=source:("The New York Times")
-                    fq=news_desk:("Sports" "Foreign")
-                    fq=news_desk:("Sports") AND glocations:("NEW YORK CITY")
-                    q=obama&facet_fields=source&facet=true&begin_date=20120101&end_date=20121231
-                    https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=romney&facet_field=day_of_week&facet=true&begin_date=20120101&end_date=20120101&api-key=your-api-key
-                    https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20191101&end_date=20191225&facet=false&fl=web_url,lead_paragraph,pub_date,section_name,subsection_name&fq=Sports,Arts&q=tennis,federer&sort=newest&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
-                */
-
-                    String maVarTest = "";
-                    if(!data.getStringExtra("wordDefault").isEmpty()){
-                        //data.getStringExtra("wordDefault");
-
-                    }
+                // reload sharedPreferences and use for Default display
+                sharedPref = loadSharedPreferences(getApplicationContext());
+                //TODO : pourquoi cela fonctionne pas ????????????
+                //String beginDate = sharedPref.getString("NotifLastDate", new SimpleDateFormat("yyyyMMdd").format(new Date()));;
+                String beginDate ="";
+                try {
+                    beginDate = sharedPref.getString("NotifLastDate", new SimpleDateFormat("yyyyMMdd").format(new Date()));
                 }
+                catch(Exception e){
+                    beginDate  = new SimpleDateFormat("yyyyMMdd").format(new Date());
+                }finally {
+                    Utils.setsBeginDate(beginDate);
+                }
+                //String endDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+                String q = sharedPref.getString("wordDefault", "");
+                String fq = sharedPref.getString("fq", "");
+                String fl = "hits";
+
+                //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200301&end_date=20200315&fl=hits&fq=Arts Business Movies Sports Travel Politcs&q=corona virus france&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
+                GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
+                Call<NotificationLowData> call = newsDataService.getNotifLowData( beginDate, fl ,fq, q ,getApiKey() );
+
+                call.enqueue(new Callback<NotificationLowData>(){
+                    @Override
+                    public void onResponse(Call<NotificationLowData> call, Response<NotificationLowData> response) {
+                        NotificationResponse result = response.body().getResponse();
+
+                        Integer nHits = result.getMeta().getHits().intValue();
+                        setnNbHits(nHits);
+                    }
+                    @Override
+                    public void onFailure(Call<NotificationLowData> call, Throwable t) {
+                        //TODO: gestion message de retour : soit le site est inaccessible
+                        Toast.makeText( getApplicationContext() , "Error : notification response", Toast.LENGTH_LONG).show();
+                    }
+                });
+                */
             }
         }
         // =================================================================================================== back searchActivity - option SEARCH
@@ -106,12 +132,11 @@ public class MainActivity extends AppCompatActivity {
             // récupérer les params de la recherche et lancer une activity recherche !!
             // faire l'activity recherche
             //
-
         }
         // =================================================================================================== back helpActivity
         if(resultCode==3){
             if(data != null  ){
-                if(data.getBooleanExtra("bModif", false)){
+                if(data.getBooleanExtra("helpbModif", false)){
                     // reload sharedPreferences if necessary
                     sharedPref = loadSharedPreferences(this);
                 }
@@ -139,8 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_help:
                 Intent helpIntent = new Intent(MainActivity.this, HelpActivity.class);
-                helpIntent.putExtra("bmodif", false);
-
+                helpIntent.putExtra("helpbModif", false);
                 startActivityForResult(helpIntent, 3);
                 return true;
             case R.id.menu_about:
@@ -155,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
     private void callNotificationParams(Integer pRoot){
         Intent searchActivityIntent = new Intent(MainActivity.this, SearchActivity.class);
 
-        loadSetting(searchActivityIntent);
+        loadSetting(searchActivityIntent, true);
         switch(pRoot){
             case 1: // Notification view
                 searchActivityIntent.putExtra("bNotif", true);
@@ -171,6 +195,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void creatNotification(boolean pbGoNotif){
+        WorkManager mWorkManager = WorkManager.getInstance();
+
+        if( pbGoNotif){
+            // ================================================= One time request !!
+            OneTimeWorkRequest mRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class).build();
+            //pull unique job in queue
+            mWorkManager.enqueueUniqueWork("nyt_periodic", ExistingWorkPolicy.REPLACE, mRequest);
+
+            //TODO: go periodic
+            // ================================================= Periodic request !!
+            //PeriodicWorkRequest mRequest = new PeriodicWorkRequest.Builder( NotificationWorker.class,20, TimeUnit.MINUTES ).build();
+            //pull periodic job in queue
+            //mWorkManager.enqueueUniquePeriodicWork("nyt_periodic", ExistingPeriodicWorkPolicy.REPLACE, mRequest);
+        }else{
+            //TODO: Stop the periodic Notification
+            //mWorkManager.cancelAllWorkByTag("nyt_channel");
+            mWorkManager.cancelUniqueWork("nyt_periodic");
+        }
+    }
     //TODO : use utils to nows if Article is viewed
 
     /**

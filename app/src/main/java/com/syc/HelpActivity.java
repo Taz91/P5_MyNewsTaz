@@ -19,6 +19,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
+
+import static com.syc.utils.Utils.getSharedTopStoriesCategory;
+import static com.syc.utils.Utils.getnArticlesMax;
 import static com.syc.utils.Utils.loadSharedPreferences;
 import static com.syc.utils.Utils.setSharedTopStoriesCategory;
 import static com.syc.utils.Utils.setbRemoveSharedPref;
@@ -46,8 +49,6 @@ public class HelpActivity extends AppCompatActivity {
         setSupportActionBar(helpactivity_toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Intent helpIntentback = getIntent();
 
         //TODO: put in ressouces ?
         //data spinner - index and value - to preselect choice in spinner
@@ -158,23 +159,29 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Boolean bModif = false;
+        Intent intent = getIntent();
+
         if(item.getItemId() == android.R.id.home){
             //save choice TopStoriesCategory in sharedPref
             if(helpTopStoriesSpinnerChoice.getSelectedItem().toString().isEmpty()){
                 setSharedTopStoriesCategory("home"); }else {
-                setSharedTopStoriesCategory(helpTopStoriesSpinnerChoice.getSelectedItem().toString());
-                bModif = true;
+                if (!getSharedTopStoriesCategory().equals(helpTopStoriesSpinnerChoice.getSelectedItem().toString())) {
+                    setSharedTopStoriesCategory(helpTopStoriesSpinnerChoice.getSelectedItem().toString());
+                    bModif = true;
+                }
             }
             //save choice nb Arcticle viewed in sharedPref
             if(helpactivity_articlesviewed_spinner.getSelectedItem() == null){
                 setnArticlesMax(30); }else {
-                setnArticlesMax(Integer.parseInt(helpactivity_articlesviewed_spinner.getSelectedItem().toString()));
-                bModif = true;
+                if (!getnArticlesMax().equals(Integer.parseInt(helpactivity_articlesviewed_spinner.getSelectedItem().toString()))) {
+                    setnArticlesMax(Integer.parseInt(helpactivity_articlesviewed_spinner.getSelectedItem().toString()));
+                    bModif = true;
+                }
             }
 
-            Intent back = new Intent();
-            back.putExtra("bModif", bModif);
-            HelpActivity.this.setResult(3,back);
+            //Intent back = new Intent();
+            intent.putExtra("helpbModif", bModif);
+            HelpActivity.this.setResult(3,intent);
             HelpActivity.this.finish();
             return true;
         }
@@ -182,22 +189,3 @@ public class HelpActivity extends AppCompatActivity {
     }
 
 }
-
-/** à supprimer
- spinnerList.add("home");
- spinnerList.add("arts");
- spinnerList.add("business");
- spinnerList.add("entrepreneurs");
- spinnerList.add("politics");
- spinnerList.add("sports");
- spinnerList.add("travel");
-
- //spinnerCategory.keySet();
- //spinnerCategory.values();
- //System.out.print(spinnerCategory.size());
- //System.out.print(spinnerCategory.get("business"));
- //System.out.print(spinnerCategory.containsKey("maClé"));
- //System.out.print(spinnerCategory.containsKey("arts"));
- //System.out.print(spinnerCategory.containsValue(2));
- //System.out.print(spinnerCategory.containsValue("2"));
- */

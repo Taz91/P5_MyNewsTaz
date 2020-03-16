@@ -5,6 +5,8 @@ import android.os.Bundle;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.syc.utils.Utils;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
@@ -26,7 +28,6 @@ public class SearchActivity extends AppCompatActivity {
     Boolean bNotifStatus = false;
 
     @BindView(R.id.fab) FloatingActionButton fab;
-    //@BindView(R.)
     @BindView(R.id.searchactivity_appbarlayout) AppBarLayout searchactivity_appbarlayout;
     @BindView(R.id.searchactivity_toolbar) Toolbar searchactivity_toolbar;
     @BindView(R.id.searchactivity_Text) EditText searchactivity_text;
@@ -82,6 +83,7 @@ public class SearchActivity extends AppCompatActivity {
                 setTitle("Search Articles");
                 bNotifStatus = false;
             }
+
             if(intent.hasExtra("wordDefault")){
                 searchactivity_text.setText(intent.getStringExtra("wordDefault"));
             }
@@ -105,6 +107,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
+        //TODO : delete under
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,10 +154,16 @@ public class SearchActivity extends AppCompatActivity {
         //back to button search in form Notif Option
         verifyForm(bNotifStatus);
     }
+
+    /**
+     * verify information provided in form as correct, for Option Search and Notification
+     * @param bNotif
+     */
     private void verifyForm(boolean bNotif){
         Integer nResultCode = bNotifStatus ? 1:2;
         boolean bOk = false;
 
+        // get all section selected
         String sBuildFQ = "";
         sBuildFQ = (cbArts.isChecked())? "\"Arts\" " : "" ;
         sBuildFQ += (cbBusiness.isChecked())? "\"Business\" " : "" ;
@@ -163,51 +172,42 @@ public class SearchActivity extends AppCompatActivity {
         sBuildFQ += (cbSport.isChecked())? "\"Sports\" " : "" ;
         sBuildFQ += (cbTravel.isChecked())? "\"Travel\" " : "" ;
 
-        //No empty choice possible
+        //bOk = true if : one or more section are selected and some worlds entered
         bOk = !sBuildFQ.isEmpty() && (searchactivity_text.getText().toString().isEmpty() ? false : true);
         if(bOk){
-            //check if minimum selected > 0 is ok
-            Integer nCbChecked = 0;
-            nCbChecked += cbArts.isChecked()? 1 : 0 ;
-            nCbChecked += cbBusiness.isChecked()? 1 : 0 ;
-            nCbChecked += cbMovies.isChecked()? 1 : 0 ;
-            nCbChecked += cbPolitics.isChecked()? 1 : 0 ;
-            nCbChecked += cbSport.isChecked()? 1 : 0 ;
-            nCbChecked += cbTravel.isChecked()? 1 : 0 ;
-            bOk = nCbChecked > 0 ? true : false;
-            //if  check ok, continue else message user
-            if(bOk){
-                Intent back = new Intent();
-                back.putExtra("cbArts", cbArts.isChecked());
-                back.putExtra("cbBusiness", cbBusiness.isChecked());
-                back.putExtra("cbMovies", cbMovies.isChecked());
-                back.putExtra("cbPolitics", cbPolitics.isChecked());
-                back.putExtra("cbSport", cbSport.isChecked());
-                back.putExtra("cbTravel", cbTravel.isChecked());
-                back.putExtra("wordDefault", searchactivity_text.getText().toString());
-                back.putExtra("bNotif", bNotifStatus);
-                //TODO : verify date
-                //apply check with form Option environment
-                if(bNotifStatus){
-                    // Notif option : verify Notif enable
-                    back.putExtra("switchNotif", searchactivity_GoNotif.isChecked());
-                }else{
-                    // Search option : verify date value begin / end
-                    back.putExtra("sBeginDate", searchactivity_dateBegin.getText().toString());
-                    back.putExtra("sEndDate", searchactivity_dateEnd.getText().toString());
-                    Toast.makeText(getBaseContext(), "Verify date !", Toast.LENGTH_LONG).show();
-                }
+            //Utils.sharedPref.
+            // je reviens de la notif ou de la search
 
-                SearchActivity.this.setResult(nResultCode,back);
-                SearchActivity.this.finish();
-            }else {
-                //TODO : possibility => color background in word / and label category
-                Toast.makeText(getBaseContext(), "Please select one categorie and one word !", Toast.LENGTH_LONG).show();
+            Intent back = new Intent();
+            back.putExtra("cbArts", cbArts.isChecked());
+            back.putExtra("cbBusiness", cbBusiness.isChecked());
+            back.putExtra("cbMovies", cbMovies.isChecked());
+            back.putExtra("cbPolitics", cbPolitics.isChecked());
+            back.putExtra("cbSport", cbSport.isChecked());
+            back.putExtra("cbTravel", cbTravel.isChecked());
+            back.putExtra("wordDefault", searchactivity_text.getText().toString());
+            back.putExtra("bNotif", bNotifStatus);
+            //to simplify code
+            back.putExtra("fq", sBuildFQ);
+
+            //TODO : verify date
+            //apply check with form Option environment
+            if(bNotifStatus){
+                // Notif option : verify Notif enable
+                back.putExtra("switchNotif", searchactivity_GoNotif.isChecked());
+            }else{
+                // Search option : verify date value begin / end
+                back.putExtra("sBeginDate", searchactivity_dateBegin.getText().toString());
+                back.putExtra("sEndDate", searchactivity_dateEnd.getText().toString());
+                Toast.makeText(getBaseContext(), "Verify date !", Toast.LENGTH_LONG).show();
             }
+
+            SearchActivity.this.setResult(nResultCode,back);
+            SearchActivity.this.finish();
 
         }else{
             //TODO : possibility => color background in word / and label category
-            Toast.makeText(getBaseContext(), "Please select one categorie and one word !", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Please select one categorie and write one word !", Toast.LENGTH_LONG).show();
         }
 
         //TODO : doit on tester s'il n'y a pas de retour de Response ? (car si vide le RV sera vide ... et donc prévenir avant d'y retourner de changer des choses .

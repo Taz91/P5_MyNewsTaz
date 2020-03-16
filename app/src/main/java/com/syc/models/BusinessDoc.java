@@ -44,7 +44,7 @@ public class BusinessDoc implements Serializable
     };
 
     public String getDate(){
-        this.dateString = convertDate( this.getPubDate() );
+        this.dateString = convertDate( this.getPubDate(), "yyyy-MM-dd", "dd/MM/yyyy" );
         return this.dateString;
     }
 
