@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -26,7 +27,7 @@ import static com.syc.utils.Utils.setsBeginDate;
 
 public class NotificationWorker extends Worker {
     private static final String WORK_RESULT = "work_result";
-    public static final String MESSAGE_STATUS = "message_status";
+    //public static final String MESSAGE_STATUS = "message_status";
     // =================================================================== shared_preferences :
     private SharedPreferences sharedPref;
 
@@ -37,21 +38,22 @@ public class NotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Data taskData = getInputData();
-        String taskDataString = taskData.getString(MESSAGE_STATUS);
-        //get data from API NYT
-        loadData();
 
-        if (getnNbHits()>0) {
-            showNotification("New York Times", taskDataString != null ? taskDataString : "New actuality for you !!");
-            setsBeginDate(new SimpleDateFormat("yyyyMMdd").format(new Date()));
-        }
+        //TODO : à ce moment que contient taskData ????? et comment il est alimenté
+
+        Data taskData = getInputData();
+        String taskDataString = taskData.getString(WORK_RESULT);
+        //get data from API NYT
+        loadData(taskDataString);
 
         Data outputData = new Data.Builder().putString(WORK_RESULT, "Jobs Finished").build();
-        return Result.success(outputData);
+
+        //TODO : comment relancer si c KO ????
+        return Result.retry();
+        //return Result.success(outputData);
     }
 
-    private void loadData(){
+    private void loadData(String ptaskDataString){
         // reload sharedPreferences and use for Default display
         sharedPref = loadSharedPreferences(getApplicationContext());
         //TODO : pourquoi cela fonctionne pas ????????????
@@ -78,11 +80,22 @@ public class NotificationWorker extends Worker {
             @Override
             public void onResponse(Call<NotificationLowData> call, Response<NotificationLowData> response) {
                 NotificationResponse result = response.body().getResponse();
-
+                //get nb of hits
                 Integer nHits = result.getMeta().getHits().intValue();
+                //put in sharedPref
                 setnNbHits(nHits);
                 // reload sharedPreferences and use for Default display
                 sharedPref = loadSharedPreferences(getApplicationContext());
+
+                if (getnNbHits()>0) {
+                    //showNotification("New York Times", ptaskDataString != null ? ptaskDataString : "New actuality for you !!");
+                    showNotification("New York Times",  getnNbHits().toString() + " New actuality for you !!");
+                    //store new begin date for the next time
+                    setsBeginDate(new SimpleDateFormat("yyyyMMdd").format(new Date()));
+                    //put message in taskDataString
+                    //taskData. = "Notification launch !!";
+                }
+
             }
             @Override
             public void onFailure(Call<NotificationLowData> call, Throwable t) {
@@ -92,20 +105,25 @@ public class NotificationWorker extends Worker {
         });
     }
 
-    private void showNotification(String task, String desc) {
+    private void showNotification(String title, String message) {
         NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         String channelId = "nyt_channel";
         String channelName = "nyt_name";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            // Option of Notif :
+            //channel.enableLights(true);
+            //channel.enableVibration(true);
+            //channel.setLockscreenVisibility( Notification.VISIBILITY_PUBLIC );
+
             manager.createNotificationChannel(channel);
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelId)
-                .setContentTitle(task)
-                .setContentText(desc)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true) //when user tips on, notif is delete
+                .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
                 .setSmallIcon(R.drawable.nyt_21x21); //ic_launcher
         manager.notify(1, builder.build());
     }
-
-
 }

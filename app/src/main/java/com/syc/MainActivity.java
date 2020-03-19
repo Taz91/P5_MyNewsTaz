@@ -3,36 +3,24 @@ import com.google.android.material.tabs.TabLayout;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.syc.models.NotificationLowData;
-import com.syc.models.NotificationResponse;
 import com.syc.ui.main.SectionsPagerAdapter;
 import com.google.android.material.appbar.AppBarLayout;
-import com.syc.utils.GetNewsDataService;
 import com.syc.utils.NotificationWorker;
-import com.syc.utils.RetrofitInstance;
-import com.syc.utils.Utils;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import androidx.viewpager.widget.ViewPager;
+import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import butterknife.ButterKnife;
 import butterknife.BindView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import static com.syc.utils.Utils.getApiKey;
 import static com.syc.utils.Utils.loadSetting;
 import static com.syc.utils.Utils.loadSharedPreferences;
-import static com.syc.utils.Utils.setnNbHits;
 
 public class MainActivity extends AppCompatActivity {
     // =================================================================== shared_preferences :
@@ -86,45 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     creatNotification(false);
                 }
-
-                /*
-                // reload sharedPreferences and use for Default display
-                sharedPref = loadSharedPreferences(getApplicationContext());
-                //TODO : pourquoi cela fonctionne pas ????????????
-                //String beginDate = sharedPref.getString("NotifLastDate", new SimpleDateFormat("yyyyMMdd").format(new Date()));;
-                String beginDate ="";
-                try {
-                    beginDate = sharedPref.getString("NotifLastDate", new SimpleDateFormat("yyyyMMdd").format(new Date()));
-                }
-                catch(Exception e){
-                    beginDate  = new SimpleDateFormat("yyyyMMdd").format(new Date());
-                }finally {
-                    Utils.setsBeginDate(beginDate);
-                }
-                //String endDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-                String q = sharedPref.getString("wordDefault", "");
-                String fq = sharedPref.getString("fq", "");
-                String fl = "hits";
-
-                //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200301&end_date=20200315&fl=hits&fq=Arts Business Movies Sports Travel Politcs&q=corona virus france&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
-                GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
-                Call<NotificationLowData> call = newsDataService.getNotifLowData( beginDate, fl ,fq, q ,getApiKey() );
-
-                call.enqueue(new Callback<NotificationLowData>(){
-                    @Override
-                    public void onResponse(Call<NotificationLowData> call, Response<NotificationLowData> response) {
-                        NotificationResponse result = response.body().getResponse();
-
-                        Integer nHits = result.getMeta().getHits().intValue();
-                        setnNbHits(nHits);
-                    }
-                    @Override
-                    public void onFailure(Call<NotificationLowData> call, Throwable t) {
-                        //TODO: gestion message de retour : soit le site est inaccessible
-                        Toast.makeText( getApplicationContext() , "Error : notification response", Toast.LENGTH_LONG).show();
-                    }
-                });
-                */
             }
         }
         // =================================================================================================== back searchActivity - option SEARCH
@@ -200,6 +149,11 @@ public class MainActivity extends AppCompatActivity {
 
         if( pbGoNotif){
             // ================================================= One time request !!
+            Constraints contraintes = new Constraints.Builder ()
+                    //.setRequiresCharging (true)
+                    .setRequiresBatteryNotLow(true)
+                    .build ();
+
             OneTimeWorkRequest mRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class).build();
             //pull unique job in queue
             mWorkManager.enqueueUniqueWork("nyt_periodic", ExistingWorkPolicy.REPLACE, mRequest);
