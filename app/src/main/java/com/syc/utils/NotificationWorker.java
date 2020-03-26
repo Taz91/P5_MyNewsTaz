@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.text.TextUtils;
 import android.widget.Toast;
 import com.syc.R;
 import com.syc.models.NotificationLowData;
@@ -49,8 +50,8 @@ public class NotificationWorker extends Worker {
         Data outputData = new Data.Builder().putString(WORK_RESULT, "Jobs Finished").build();
 
         //TODO : comment relancer si c KO ????
-        return Result.retry();
-        //return Result.success(outputData);
+        //return Result.retry();
+        return Result.success(outputData);
     }
 
     private void loadData(String ptaskDataString){
@@ -59,17 +60,15 @@ public class NotificationWorker extends Worker {
         //TODO : pourquoi cela fonctionne pas ????????????
         //String beginDate = sharedPref.getString("NotifLastDate", new SimpleDateFormat("yyyyMMdd").format(new Date()));;
         String beginDate ="";
-        try {
-            beginDate = sharedPref.getString("NotifLastDate", new SimpleDateFormat("yyyyMMdd").format(new Date()));
-        }
-        catch(Exception e){
+        beginDate = sharedPref.getString("NotifLastDate", new SimpleDateFormat("yyyyMMdd").format(new Date()));
+        if(TextUtils.isEmpty(beginDate)){
             beginDate  = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        }finally {
-            Utils.setsBeginDate(beginDate);
         }
+        Utils.setsBeginDate(beginDate);
+
         //String endDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String q = sharedPref.getString("wordDefault", "");
-        String fq = sharedPref.getString("fq", "");
+        String q = sharedPref.getString("qNotif", "");
+        String fq = sharedPref.getString("fqNotif", "");
         String fl = "hits";
 
         //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200301&end_date=20200315&fl=hits&fq=Arts Business Movies Sports Travel Politcs&q=corona virus france&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
@@ -79,24 +78,26 @@ public class NotificationWorker extends Worker {
         call.enqueue(new Callback<NotificationLowData>(){
             @Override
             public void onResponse(Call<NotificationLowData> call, Response<NotificationLowData> response) {
-                NotificationResponse result = response.body().getResponse();
-                //get nb of hits
-                Integer nHits = result.getMeta().getHits().intValue();
-                //put in sharedPref
-                setnNbHits(nHits);
-                // reload sharedPreferences and use for Default display
-                sharedPref = loadSharedPreferences(getApplicationContext());
+                if(response.isSuccessful()){
+                    NotificationResponse result = response.body().getResponse();
+                    //get nb of hits
+                    Integer nHits = result.getMeta().getHits();
+                    //put in sharedPref
+                    setnNbHits(nHits);
+                    // reload sharedPreferences and use for Default display
+                    sharedPref = loadSharedPreferences(getApplicationContext());
 
-                if (getnNbHits()>0) {
-                    //showNotification("New York Times", ptaskDataString != null ? ptaskDataString : "New actuality for you !!");
-                    showNotification("New York Times",  getnNbHits().toString() + " New actuality for you !!");
-                    //store new begin date for the next time
-                    setsBeginDate(new SimpleDateFormat("yyyyMMdd").format(new Date()));
-                    //put message in taskDataString
-                    //taskData. = "Notification launch !!";
+                    if (getnNbHits()>0) {
+                        //showNotification("New York Times", ptaskDataString != null ? ptaskDataString : "New actuality for you !!");
+                        showNotification("New York Times",  getnNbHits().toString() + " New actuality for you !!");
+                        //store new begin date for the next time
+                        setsBeginDate(new SimpleDateFormat("yyyyMMdd").format(new Date()));
+                        //put message in taskDataString
+                        //taskData. = "Notification launch !!";
+                    }
                 }
-
             }
+
             @Override
             public void onFailure(Call<NotificationLowData> call, Throwable t) {
                 //TODO: gestion message de retour : soit le site est inaccessible

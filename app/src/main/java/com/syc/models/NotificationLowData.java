@@ -1,7 +1,5 @@
 package com.syc.models;
 import java.io.Serializable;
-
-import com.google.android.gms.common.api.Response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

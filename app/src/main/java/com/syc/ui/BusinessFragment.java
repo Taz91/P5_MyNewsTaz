@@ -68,19 +68,13 @@ public class BusinessFragment extends Fragment {
 
     private void loadData() {
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
-
-        String fq = "Sport Arts";
-
-
-
-
+        //TODO: if time, include parameter in help Activity
+        String fq = "Business";
         Call<BusinessNYT> call = newsDataService.getBusinessNews( fq ,getApiKey() );
 
         call.enqueue(new Callback<BusinessNYT>(){
-
             @Override
             public void onResponse(Call<BusinessNYT> call, Response<BusinessNYT> response) {
-
                 BusinessResponse businessResponse = response.body().getResponse();
                 List<BusinessDoc> result = businessResponse.getDocs();
 
@@ -93,13 +87,9 @@ public class BusinessFragment extends Fragment {
 
             @Override
             public void onFailure(Call<BusinessNYT> call, Throwable t) {
-                // TODO : gestion message de retour : soit le site est inaccessible
-                // y mettre une image ou un fragment spécifique ?
-
-                Toast.makeText(getContext(), "Une erreur", Toast.LENGTH_LONG).show();
+                // TODO : if time, throw exception in differente case (item : preformated with img and text to inform)
+                Toast.makeText(getContext(), "No data found", Toast.LENGTH_LONG).show();
             }
         });
-
     }
-
 }
