@@ -10,7 +10,10 @@ import com.syc.R;
 import com.syc.models.NotificationResponse;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import androidx.core.app.NotificationCompat;
 import androidx.work.ExistingWorkPolicy;
@@ -159,7 +162,8 @@ public class Utils {
                 psearchActivityIntent.putExtra("switchNotif", sharedPref.getBoolean("switchNotif", false));
                 psearchActivityIntent.putExtra("articleViewed", sharedPref.getString("articleViewed", ""));
                 psearchActivityIntent.putExtra("nbArticles", sharedPref.getInt("nbArticles", 30));
-                psearchActivityIntent.putExtra("fq", sharedPref.getString("fq", ""));
+                psearchActivityIntent.putExtra("fqNotif", sharedPref.getString("fqNotif", ""));
+                psearchActivityIntent.putExtra("qNotif", sharedPref.getString("qNotif", ""));
             }else {
                 sharedPref
                     .edit()
@@ -171,9 +175,9 @@ public class Utils {
                     .putBoolean("cbSport",psearchActivityIntent.getBooleanExtra("cbSport",false))
                     .putBoolean("cbTravel",psearchActivityIntent.getBooleanExtra("cbTravel",false))
                     .putBoolean("switchNotif",psearchActivityIntent.getBooleanExtra("switchNotif",false))
-                    .putString("fq",psearchActivityIntent.getStringExtra("fq"))
+                    .putString("fqNotif",psearchActivityIntent.getStringExtra("fqNotif"))
+                    .putString("qNotif",psearchActivityIntent.getStringExtra("qNotif"))
                     .commit();
-
             }
         }else {
             sharedPrefLoadDefault();
@@ -185,23 +189,28 @@ public class Utils {
         if(sharedPref.getString(PREFS_ARTICLESVIEWED,"").isEmpty()){
             sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + pArticlesViewed;
         }else{
-            // explode la chaine, si > x elements alors il faudrat garder uniquement les xx derniers
-            Integer nbArticlesSave = getnArticlesMax();//sharedPref.getInt("nbArticles",30) ;
-            String[] splitSharedArticlesViewed = sharedArticlesViewed.split(":") ;
-            if(splitSharedArticlesViewed.length > nbArticlesSave){
-                //reconstituer avec le 1er en moins
-                Integer index = 1;
-                String newSharedArticlesViewed = "";
-                while(index < nbArticlesSave){
-                    if(newSharedArticlesViewed.isEmpty()){
-                        newSharedArticlesViewed = splitSharedArticlesViewed[index];
-                    }else{
-                        newSharedArticlesViewed += ":" + splitSharedArticlesViewed[index];
-                    }
-                    index++;
-                }
-            }
+            //Get all artilces viewed
             sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + ":" + pArticlesViewed;
+            //get limite of nb articles storage
+            Integer nbArticlesSave = getnArticlesMax();//sharedPref.getInt("nbArticles",30) ;
+            //Explode in list, to delete over limit
+            List<String> listArticlesViewed = Arrays.asList(sharedArticlesViewed.split(":"));
+            if( listArticlesViewed.size() > nbArticlesSave ){
+                //Delete element are not necessary, low index (first in, first out)
+                Integer beginIndex = listArticlesViewed.size()-nbArticlesSave;;
+                listArticlesViewed = listArticlesViewed.subList( beginIndex , listArticlesViewed.size() );
+                //build new sharedPref article viewed
+                //newSharedArticlesViewed = String.join(":",listArticlesViewed);
+                String newSharedArticlesViewed = "";
+                for (Iterator ite = listArticlesViewed.subList( beginIndex , listArticlesViewed.size() ).iterator(); ite.hasNext(); ){
+                    if(newSharedArticlesViewed.isEmpty()){
+                        newSharedArticlesViewed = ite.next().toString();  // ite.next().toString()
+                    }else{
+                        newSharedArticlesViewed += ":" + ite.next().toString();
+                    }
+                }
+                sharedArticlesViewed = newSharedArticlesViewed;
+            }
         }
         sharedPref
                 .edit()
@@ -228,7 +237,7 @@ public class Utils {
             .edit()
             .putString("apiKey","J0iJw0a8fdshubHztJsOJxEEg6hPstOG")
             .putString("articleViewed", "")
-            .putString("wordDefault", "trump macron")
+            .putString("wordDefault", "french paris")
             .putBoolean("cbArts",false)
             .putBoolean("cbBusiness",true)
             .putBoolean("cbMovies",false)
@@ -241,7 +250,9 @@ public class Utils {
             .putBoolean("bRemoveSharedPref", false)
             .putString("NotifLastDate","")
             .putInt("NotifNbOf", 0)
-            .putString("fq","")
+            .putInt("nNbHits", 0)
+            .putString("fqNotif","")
+            .putString("qNotif","french paris")
             .commit();
     }
 
@@ -267,7 +278,9 @@ public class Utils {
                 .remove("sharedTopStoriesCategory")
                 .remove("NotifLastDate")
                 .remove("NotifNbOf")
-                .remove("fq")
+                .remove("nNbHits")
+                .remove("fqNotif")
+                .remove("qNotif")
                 .commit();
         setbRemoveSharedPref(false);
         sharedPrefLoadDefault();

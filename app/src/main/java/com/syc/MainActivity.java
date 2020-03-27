@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         // =================================================================================================== back searchActivity - option NOTIF
         if(resultCode==1){
             if( data != null ){
-                // ========================================================== sharedPreferences
                 // put in sharedPrefs
                 loadSetting(data,false);
 
@@ -78,12 +77,36 @@ public class MainActivity extends AppCompatActivity {
         }
         // =================================================================================================== back searchActivity - option SEARCH
         if(resultCode==2){
-            // récupérer les params de la recherche et lancer une activity recherche !!
-            // faire l'activity recherche
-            //
+            if( data != null ){
+                if(data.getBooleanExtra("goSearch",false)){
+                    // get Search params and launch ResultSearchActivity
+                    Intent ResultSearchActivityIntent = new Intent(MainActivity.this, ResultSearchActivity.class);
+                    //loadSetting(ResultSearchActivityIntent, true);
+                    ResultSearchActivityIntent.putExtra("qSearch",data.getStringExtra("qSearch"));
+                    ResultSearchActivityIntent.putExtra("fqSearch",data.getStringExtra("fqSearch"));
+                    ResultSearchActivityIntent.putExtra("sBeginDate",data.getStringExtra("sBeginDate"));
+                    ResultSearchActivityIntent.putExtra("sEndDate",data.getStringExtra("sEndDate"));
+
+                    ResultSearchActivityIntent.putExtra("bNotif", false);
+                    startActivityForResult(ResultSearchActivityIntent, 4);
+                }else{
+                    // retour Search type backSpace !!!!!
+                    // ne rien faire !!!!!!!!!!!!!
+                }
+
+            }
         }
         // =================================================================================================== back helpActivity
         if(resultCode==3){
+            if(data != null  ){
+                if(data.getBooleanExtra("helpbModif", false)){
+                    // reload sharedPreferences if necessary
+                    sharedPref = loadSharedPreferences(this);
+                }
+            }
+        }
+        // =================================================================================================== back ResultSearchActivity
+        if(resultCode==4){
             if(data != null  ){
                 if(data.getBooleanExtra("helpbModif", false)){
                     // reload sharedPreferences if necessary

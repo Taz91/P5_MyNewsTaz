@@ -42,6 +42,21 @@ public interface GetNewsDataService {
      * Call<MostPopularNYT> getPopularNews(@Path("periode") String periode, @Path("typesocial") String typesocial, @Query("api_key") String userkey);
     */
 
+    //TODO: if time, this fragment can be the result of notification, with all notification between last date notif and open MyNews
+    //en prenant les params de la notification avec l'ensemble des datas
+    /**
+     *
+     * @param fq
+     * @param userkey
+     * @return
+     */
+    @GET("search/v2/articlesearch.json")
+    Call<BusinessNYT> getBusinessNews(@Query("fq") String fq, @Query("api-key") String userkey );
+
+
+
+    @GET("search/v2/articlesearch.json")
+    Call<NotificationLowData> getSearchArticles(@Query("begin_date") String begin_date, @Query("end_date") String end_date, @Query("fq") String fq, @Query("q") String q, @Query("api-key") String userkey );
     /*
     Search : 3 type de paramêtres :
             - dates deb / fin
@@ -69,8 +84,7 @@ public interface GetNewsDataService {
 
     https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
     */
-    @GET("search/v2/articlesearch.json")
-    Call<BusinessNYT> getBusinessNews(@Query("fq") String fq, @Query("api-key") String userkey );
+
 
     //, @Query("begin_date") String beginDate
     //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200101&end_date=20200103&facet=false&fl=web_url,lead_paragraph,pub_date,section_name,subsection_name,multimedia&fq=Sports,Arts&q=federer&sort=newest&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
