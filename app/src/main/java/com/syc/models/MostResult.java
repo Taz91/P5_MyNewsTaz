@@ -86,7 +86,7 @@ public class MostResult implements Serializable
     };
 
     public String getDate(){
-        this.dateString = convertDate( this.getPublishedDate() );
+        this.dateString = convertDate( this.getPublishedDate(),"yyyy-MM-dd" , "dd/MM/yyyy" );
         return this.dateString;
     }
 

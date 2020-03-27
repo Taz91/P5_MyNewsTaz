@@ -22,6 +22,7 @@ import com.syc.utils.GetNewsDataService;
 import com.syc.utils.MostAdapter;
 import com.syc.utils.RetrofitInstance;
 import java.util.List;
+import static com.syc.utils.Utils.getApiKey;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +30,7 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class MostPopularFragment extends Fragment {
-    private static String API_KEY = "J0iJw0a8fdshubHztJsOJxEEg6hPstOG";
+    //private static String API_KEY = "J0iJw0a8fdshubHztJsOJxEEg6hPstOG";
     @BindView(R.id.rv_list) RecyclerView rvList;
 
     public MostPopularFragment() {
@@ -67,7 +68,17 @@ public class MostPopularFragment extends Fragment {
 
     private void loadData() {
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
-        Call<MostPopularNYT> call = newsDataService.getPopularNews( API_KEY);
+        Call<MostPopularNYT> call = newsDataService.getPopularNews( getApiKey());
+                /*
+                MostPopular : 3 types (emailed/viewed/shared), periode 1,7,30j
+                https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
+                https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
+
+                Cas shared: shared type = email, facebook, twitter, periode = 1,7,30j
+                https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
+                https://api.nytimes.com/svc/mostpopular/v2/shared/1.json?api-key=yourkey
+                */
+
                 /*
                 MostPopular : 3 types (emailed/viewed/shared), periode 1,7,30j
                 https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
@@ -79,11 +90,10 @@ public class MostPopularFragment extends Fragment {
 
             @Override
             public void onResponse(Call<MostPopularNYT> call, Response<MostPopularNYT> response) {
-                //Toast.makeText(getContext(), "Yesss c'est ok", Toast.LENGTH_LONG).show();
 
                 List<MostResult> result = response.body().getResults()  ; //getResults();
 
-                MostAdapter adapter = new MostAdapter(result , Glide.with(getView()));
+                MostAdapter adapter = new MostAdapter(result , Glide.with(getView()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);

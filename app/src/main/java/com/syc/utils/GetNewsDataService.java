@@ -1,7 +1,7 @@
 package com.syc.utils;
-
+import com.syc.models.BusinessNYT;
 import com.syc.models.MostPopularNYT;
-import com.syc.models.SearchNYT;
+import com.syc.models.NotificationLowData;
 import com.syc.models.TopStoriesNYT;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -9,33 +9,38 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
- * @author Deyine Jiddou (deyine.jiddou@gmail.com)
+ * @author Taz91
  * Created at 2019-10-25
  */
 public interface GetNewsDataService {
-    /*
-    TopStories  : https://api.nytimes.com/svc/topstories/v2/science.json?api-key=yourkey
-                : parameter = section =>    arts, business, politics, sports, travel, technology
-                                            automobiles, books,  fashion, food, health, home, insider, magazine, movies, national, tmagazine,
-                                            nyregion, obituaries, opinion,  realestate, science, sundayreview, theater, upshot, world
-    */
+    /**
+     * TopStories
+     * @param section - home / arts / business / entrepreneurs / politics / sports / travel
+     * @param userkey
+     * @return
+     */
     @GET("topstories/v2/{section}.json" )
     Call<TopStoriesNYT> getTopStoriesNew(@Path("section") String section, @Query("api-key") String userkey );
 
-
-    /*
-    MostPopular : 3 types (emailed/viewed/shared), periode 1,7,30j
-    https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
-    https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
-
-    Cas shared: shared type = email, facebook, twitter, periode = 1,7,30j
-
-    https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
-    */
+    /**
+     * MostPopular = 2 types in this case ( emailed/viewed ), and 3 periode (1,7,30j)
+     * examples :
+     * https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
+     * https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
+     * @GET("mostpopular/v2/{type}/{periode}.json")
+     * Call<MostPopularNYT> getPopularNews(@Path("type")String type, @Path("periode") String periode, @Query("api-key") String userkey);
+     */
     @GET("mostpopular/v2/viewed/7.json")
     Call<MostPopularNYT> getPopularNews(@Query("api-key") String userkey);
-    //Call<MostPopularNYT> getPopularNews(@Query("type") String type, @Query("periode") String periode, @Query("api_key") String userkey);
 
+    //TODO: MostPopular - possibility if time
+    /**
+     * MostPopular le type shared: type = email, facebook, twitter, periode = 1,7,30j
+     * example :
+     * https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
+     * @GET("mostpopular/v2/shared/{type}/{periode}.json")
+     * Call<MostPopularNYT> getPopularNews(@Path("periode") String periode, @Path("typesocial") String typesocial, @Query("api_key") String userkey);
+    */
 
     /*
     Search : 3 type de paramêtres :
@@ -65,8 +70,14 @@ public interface GetNewsDataService {
     https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
     */
     @GET("search/v2/articlesearch.json")
-    Call<SearchNYT> getSearchNews(@Query("api-key") String userkey);
-    //Call<MostPopularNYT> getPopularNews(@Query("type") String type, @Query("periode") String periode, @Query("api_key") String userkey);
+    Call<BusinessNYT> getBusinessNews(@Query("fq") String fq, @Query("api-key") String userkey );
+
+    //, @Query("begin_date") String beginDate
     //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200101&end_date=20200103&facet=false&fl=web_url,lead_paragraph,pub_date,section_name,subsection_name,multimedia&fq=Sports,Arts&q=federer&sort=newest&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
 
+    // Notification low data !!!
+    @GET("search/v2/articlesearch.json")
+    Call<NotificationLowData> getNotifLowData(@Query("begin_date") String begin_date, @Query("fl") String fl, @Query("fq") String fq, @Query("q") String q, @Query("api-key") String userkey );
+    //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200301&fl=hits&fq=macron&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
+    //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20200301&end_date=20200315&fl=hits&fq=Arts Business Movies Sports Travel Politcs&q=corona virus france&api-key=J0iJw0a8fdshubHztJsOJxEEg6hPstOG
 }

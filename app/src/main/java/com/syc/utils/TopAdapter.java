@@ -6,37 +6,50 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.syc.DetailActivity;
 import com.syc.R;
-import com.syc.models.MostResult;
+import com.syc.models.TopResult;
 import java.util.List;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.bumptech.glide.RequestManager;
 import static com.syc.utils.Utils.setSharedArticlesViewed;
 
-public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> {
+public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
     //list of news
-    private List<MostResult> myNews;
+    private List<TopResult> myNews;
     //For WebView
     private Context context;
-    //Declare Glide object
+    //Glide object
     private RequestManager glide;
+    /**
+     * Glide image traitement
+     */
     private RequestOptions options = new RequestOptions()
                 .override(75,75)
                 .placeholder(R.drawable.baseline_error_outline_black_48)
                 .error(R.drawable.baseline_error_outline_black_48);
     private String imgUrl;
 
-    public MostAdapter(List<MostResult> myNews, RequestManager glide, Context context) {
+    /**
+     * constructor
+     * @param myNews
+     * @param glide
+     * @param context
+     */
+    public TopAdapter(List<TopResult> myNews, RequestManager glide, Context context ) {
         this.myNews = myNews;
         this.glide = glide;
         this.context = context;
     }
 
+    //TODO : comprendre le but du MyViewHolder et mettre un commentaire
+    /**
+     *
+     */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.rvItemImg) ImageView itemImg;
         @BindView(R.id.rvItemCategory) TextView itemCategory;
@@ -63,12 +76,12 @@ public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        MostResult n = myNews.get(position);
+        TopResult n = myNews.get(position);
         // binding ItemView
         //picture
         try{
             //Multimedia can be empty
-            imgUrl = n.getMedia().get(0).getMediaMetadata().get(0).getUrl();
+            imgUrl = n.getMultimedia().get(0).getUrl();
         }catch ( Exception e){
             //Multimedia is Null : load replacement image
             imgUrl = "R.drawable.baseline_error_outline_black_48";
@@ -84,6 +97,7 @@ public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> 
 
         /**
          * Intercept click on img for read article with webView
+         * prepare add in ArticlesViewed
          */
         holder.itemImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +105,11 @@ public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> 
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("articleUrl", n.getUrl());
                 // get id part of uri for example "https://nyti.ms/2GQvc0A" like "2GQvc0A"
+
+                String maVar = n.getUri() ;
+                maVar = n.getUri().substring(n.getUri().lastIndexOf("/")) ;
+
+
                 setSharedArticlesViewed(n.getUri().substring(n.getUri().lastIndexOf("/")));
 
                 //intent.putExtra("articleId",n.getUri().substring(n.getUri().lastIndexOf(":")));

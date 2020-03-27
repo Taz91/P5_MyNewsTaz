@@ -11,6 +11,7 @@
 
     <!-- Search Activity dimens -->
     <dimen name="margin_top">10dp</dimen>
+    <dimen name="margin_toplow">5dp</dimen>
     <dimen name="margin_start">10dp</dimen>
 
 

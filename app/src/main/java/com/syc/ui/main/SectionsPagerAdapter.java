@@ -1,5 +1,4 @@
 package com.syc.ui.main;
-
 import android.content.Context;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -7,8 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.syc.R;
+import com.syc.ui.BusinessFragment;
 import com.syc.ui.MostPopularFragment;
-import com.syc.ui.SearchFragment;
 import com.syc.ui.TopStoriesFragment;
 
 /**
@@ -21,6 +20,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
+        //TODO: méthode deprecated !!
         super(fm);
         mContext = context;
     }
@@ -35,7 +35,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return MostPopularFragment.newInstance();
             case 2:
-                return SearchFragment.newInstance();
+                return BusinessFragment.newInstance();
             default:
                 return PlaceholderFragment.newInstance(position);
         }

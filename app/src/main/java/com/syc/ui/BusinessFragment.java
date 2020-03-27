@@ -16,31 +16,30 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.syc.R;
-import com.syc.models.TopResult;
-import com.syc.models.TopStoriesNYT;
+import com.syc.models.BusinessDoc;
+import com.syc.models.BusinessNYT;
+import com.syc.models.BusinessResponse;
+import com.syc.utils.BusinessAdapter;
 import com.syc.utils.GetNewsDataService;
-import com.syc.utils.TopAdapter;
 import com.syc.utils.RetrofitInstance;
 import java.util.List;
 import static com.syc.utils.Utils.getApiKey;
-import static com.syc.utils.Utils.getSharedTopStoriesCategory;
-
-//TODO : mettre les commentaires en place !!
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TopStoriesFragment#newInstance} factory method to
+ * Use the {@link BusinessFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopStoriesFragment extends Fragment {
-    @BindView(R.id.rv_list)  RecyclerView rvList;
+public class BusinessFragment extends Fragment {
+    @BindView(R.id.rv_list)
+    RecyclerView rvList;
 
-    public TopStoriesFragment() {
+      public BusinessFragment() {
         // Required empty public constructor
     }
 
-    public static TopStoriesFragment newInstance() {
-        TopStoriesFragment fragment = new TopStoriesFragment();
+    public static BusinessFragment newInstance() {
+        BusinessFragment fragment = new BusinessFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -53,11 +52,10 @@ public class TopStoriesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_top_stories, container, false);
+        View v =  inflater.inflate(R.layout.fragment_business, container, false);
         ButterKnife.bind(this, v);
-
         return v;
     }
 
@@ -69,21 +67,24 @@ public class TopStoriesFragment extends Fragment {
     }
 
     private void loadData() {
-         /*
-        TopStories  : https://api.nytimes.com/svc/topstories/v2/science.json?api-key=yourkey
-                    : parameter = section => arts, automobiles, books, business, fashion, food, health, home, insider, magazine, movies, nyregion, obituaries,
-                                             opinion, politics, realestate, science, sports, sundayreview, technology, theater, t-magazine, travel, upshot, us, world
-        */
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
-        Call<TopStoriesNYT> call = newsDataService.getTopStoriesNew( getSharedTopStoriesCategory(), getApiKey() );
 
-        call.enqueue(new Callback<TopStoriesNYT>(){
+        String fq = "Sport Arts";
+
+
+
+
+        Call<BusinessNYT> call = newsDataService.getBusinessNews( fq ,getApiKey() );
+
+        call.enqueue(new Callback<BusinessNYT>(){
 
             @Override
-            public void onResponse(Call<TopStoriesNYT> call, Response<TopStoriesNYT> response) {
-                List<TopResult> result = response.body().getResults();
+            public void onResponse(Call<BusinessNYT> call, Response<BusinessNYT> response) {
 
-                TopAdapter adapter = new TopAdapter(result , Glide.with(getView()), getContext());
+                BusinessResponse businessResponse = response.body().getResponse();
+                List<BusinessDoc> result = businessResponse.getDocs();
+
+                BusinessAdapter adapter = new BusinessAdapter(result , Glide.with(getView()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);
@@ -91,12 +92,14 @@ public class TopStoriesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<TopStoriesNYT> call, Throwable t) {
+            public void onFailure(Call<BusinessNYT> call, Throwable t) {
                 // TODO : gestion message de retour : soit le site est inaccessible
                 // y mettre une image ou un fragment spécifique ?
 
                 Toast.makeText(getContext(), "Une erreur", Toast.LENGTH_LONG).show();
             }
         });
+
     }
+
 }
