@@ -11,17 +11,21 @@ import retrofit2.Response;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
-import com.syc.models.TopResult;
-import com.syc.models.TopStoriesNYT;
+import com.syc.models.SearchDoc;
+import com.syc.models.SearchNYT;
+import com.syc.models.SearchResponse;
 import com.syc.utils.GetNewsDataService;
-import com.syc.utils.ResultAdapter;
 import com.syc.utils.RetrofitInstance;
+import com.syc.utils.SearchAdapter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import static com.syc.utils.Utils.getApiKey;
-import static com.syc.utils.Utils.getSharedTopStoriesCategory;
 import static com.syc.utils.Utils.loadSharedPreferences;
 
 public class ResultSearchActivity extends AppCompatActivity {
@@ -46,25 +50,51 @@ public class ResultSearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("My search result");
 
-        loadData();
-
+        //get putExtra of MainActivity, show Notif or Search switch with params
+        Intent intent = getIntent();
+        loadData(intent);
     }
 
+    private void loadData(Intent intent) {
+        String beginDate = "";
+        String endDate = "";
 
-    private void loadData() {
-        //@GET("search/v2/articlesearch.json")
-        //Call<NotificationLowData> getSearchArticles(@Query("begin_date") String begin_date, @Query("end_date") String end_date, @Query("fq") String fq, @Query("q") String q, @Query("api-key") String userkey );
+        Map<String,String> parameters = new HashMap<>();
 
+        if(intent != null  ){
+            if(intent.hasExtra("qSearch")){
+                parameters.put("q", intent.getStringExtra("qSearch"));
+            }
+            if(intent.hasExtra("fqSearch")){
+                parameters.put("fq", intent.getStringExtra("fqSearch"));
+            }
+            if(intent.hasExtra("sBeginDate")){
+                beginDate = intent.getStringExtra("sBeginDate");
+                if(!TextUtils.isEmpty(beginDate)){
+                    parameters.put("beginDate", intent.getStringExtra("sBeginDate"));
+                }
+            }
+            if(intent.hasExtra("sEndDate")){
+                endDate = intent.getStringExtra("sEndDate");
+                if(!TextUtils.isEmpty(endDate)){
+                    parameters.put("endDate", intent.getStringExtra("sEndDate"));
+                }
+            }
+        }
+
+        parameters.put("api-key", getApiKey());
+        // q  /  fq  /  beginDate  /  endDate
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
-        Call<TopStoriesNYT> call = newsDataService.getTopStoriesNew( getSharedTopStoriesCategory(), getApiKey() );
+        Call<SearchNYT> call = newsDataService.getSearchArticles( parameters );
 
-        call.enqueue(new Callback<TopStoriesNYT>(){
+        call.enqueue(new Callback<SearchNYT>(){
 
             @Override
-            public void onResponse(Call<TopStoriesNYT> call, Response<TopStoriesNYT> response) {
-                List<TopResult> result = response.body().getResults();
+            public void onResponse(Call<SearchNYT> call, Response<SearchNYT> response) {
+                SearchResponse searchResponse = response.body().getResponse();
+                List<SearchDoc> result = searchResponse.getDocs();
 
-                ResultAdapter adapter = new ResultAdapter(result , Glide.with(getApplicationContext()), getApplicationContext());
+                SearchAdapter adapter = new SearchAdapter(result , Glide.with(getApplicationContext()), getApplicationContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);
@@ -72,7 +102,7 @@ public class ResultSearchActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<TopStoriesNYT> call, Throwable t) {
+            public void onFailure(Call<SearchNYT> call, Throwable t) {
                 // TODO : gestion message de retour : soit le site est inaccessible
                 // y mettre une image ou un fragment spécifique ?
 

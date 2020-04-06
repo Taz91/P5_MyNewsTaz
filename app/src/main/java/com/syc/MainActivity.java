@@ -12,10 +12,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import java.util.concurrent.TimeUnit;
 import androidx.viewpager.widget.ViewPager;
 import androidx.work.Constraints;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import butterknife.ButterKnife;
 import butterknife.BindView;
@@ -89,11 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
                     ResultSearchActivityIntent.putExtra("bNotif", false);
                     startActivityForResult(ResultSearchActivityIntent, 4);
-                }else{
-                    // retour Search type backSpace !!!!!
-                    // ne rien faire !!!!!!!!!!!!!
                 }
-
             }
         }
         // =================================================================================================== back helpActivity
@@ -177,79 +174,18 @@ public class MainActivity extends AppCompatActivity {
                     .setRequiresBatteryNotLow(true)
                     .build ();
 
-            OneTimeWorkRequest mRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class).build();
+            //OneTimeWorkRequest mRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class).build();
             //pull unique job in queue
-            mWorkManager.enqueueUniqueWork("nyt_periodic", ExistingWorkPolicy.REPLACE, mRequest);
+            //mWorkManager.enqueueUniqueWork("nyt_periodic", ExistingWorkPolicy.REPLACE, mRequest);
 
-            //TODO: go periodic
             // ================================================= Periodic request !!
-            //PeriodicWorkRequest mRequest = new PeriodicWorkRequest.Builder( NotificationWorker.class,20, TimeUnit.MINUTES ).build();
+            PeriodicWorkRequest mRequest = new PeriodicWorkRequest.Builder( NotificationWorker.class,15, TimeUnit.MINUTES ).build();
             //pull periodic job in queue
-            //mWorkManager.enqueueUniquePeriodicWork("nyt_periodic", ExistingPeriodicWorkPolicy.REPLACE, mRequest);
+            mWorkManager.enqueueUniquePeriodicWork("nyt_periodic", ExistingPeriodicWorkPolicy.REPLACE, mRequest);
         }else{
             //TODO: Stop the periodic Notification
             //mWorkManager.cancelAllWorkByTag("nyt_channel");
             mWorkManager.cancelUniqueWork("nyt_periodic");
         }
     }
-    //TODO : use utils to nows if Article is viewed
-
-    /**
-     *
-     *
-     */
-    /*
-    private void eloadSetting(Intent psearchActivityIntent ){
-        apiKey = sharedPref.getString( PREFS_APIKEY , "" );
-        if(sharedPref != null){
-            psearchActivityIntent.putExtra("wordDefault", sharedPref.getString("wordDefault",""));
-            psearchActivityIntent.putExtra("cbArts", sharedPref.getBoolean("cbArts", false));
-            psearchActivityIntent.putExtra("cbBusiness", sharedPref.getBoolean("cbBusiness", false));
-            psearchActivityIntent.putExtra("cbEntrepreneur", sharedPref.getBoolean("cbEntrepreneur", false));
-            psearchActivityIntent.putExtra("cbPolitics", sharedPref.getBoolean("cbPolitics", false));
-            psearchActivityIntent.putExtra("cbSport", sharedPref.getBoolean("cbSport", false));
-            psearchActivityIntent.putExtra("cbTravel", sharedPref.getBoolean("cbTravel", false));
-            psearchActivityIntent.putExtra("switchNotif", sharedPref.getBoolean("switchNotif", false));
-            psearchActivityIntent.putExtra("articleViewed", sharedPref.getString("articleViewed", ""));
-            psearchActivityIntent.putExtra("nbArticle", sharedPref.getInt("nbArticle", 30));
-        }else {
-            //sharedPrefLoadDefault();
-        }
-
-        //Build
-        List<Item> listDayTemp ;
-        listDayTemp = new ArrayList<>();
-        List<Item> listDay ;
-        listDay = new ArrayList<>();
-        int countItem = 0;
-
-        //Get all mood
-        sharedPreferencesArticleViewed = getBaseContext().getSharedPreferences(PREFS_ARTICLEVIEWED, MODE_PRIVATE);
-        Map<String, ?> prefsMap = sharedPreferencesArticleViewed.getAll();
-        for (Map.Entry<String, ?> entry: prefsMap.entrySet()) {
-
-            //Log.d("montest", entry.getKey() +" != " + buildKey());
-
-            //dont show current mood
-            if (!entry.getKey().equals(buildKey()) ){
-                listDayTemp.add(new Item(entry.getKey(), getComment( entry.getKey() ), tbliColor[iMood], iMood ));
-            }
-        }
-        //Collections.sort(listDayTemp, (Item p1, Item p2) -> p1.itemColor > p2.itemColor );
-
-        //listDayTemp full mood list, listDay contruct with full oy max 7 item
-        Collections.sort(listDayTemp, Collections.reverseOrder());
-        if (bFull){
-            listDay = listDayTemp;
-        }
-        else {
-            //if list is less then 7 item, error ibound
-            countItem = (listDayTemp.size()<7) ? listDayTemp.size(): 7 ;
-            for(int i = 0; i <countItem; i++){
-                listDay.add(listDayTemp.get(i));
-            }
-        }
-
-    }
-    */
 }

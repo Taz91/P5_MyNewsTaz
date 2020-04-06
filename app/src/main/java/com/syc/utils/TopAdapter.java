@@ -1,6 +1,7 @@
 package com.syc.utils;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.RequestManager;
-import static com.syc.utils.Utils.setSharedArticlesViewed;
+import static com.syc.utils.Utils.addSharedArticlesViewed;
+import static com.syc.utils.Utils.isArticleViewed;
 
 public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
     //list of news
@@ -95,6 +97,12 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
         holder.itemDate.setText(n.getDate());
         holder.itemCategory.setText(n.getCategory());
 
+        String article = n.getUri().substring(n.getUri().lastIndexOf("/"));
+        //Boolean bOk = isArticleViewed(monArticle);
+        if (isArticleViewed(article)) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#dbdce0"));
+        }
+
         /**
          * Intercept click on img for read article with webView
          * prepare add in ArticlesViewed
@@ -104,15 +112,9 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("articleUrl", n.getUrl());
-                // get id part of uri for example "https://nyti.ms/2GQvc0A" like "2GQvc0A"
-
-                String maVar = n.getUri() ;
-                maVar = n.getUri().substring(n.getUri().lastIndexOf("/")) ;
-
-
-                setSharedArticlesViewed(n.getUri().substring(n.getUri().lastIndexOf("/")));
-
-                //intent.putExtra("articleId",n.getUri().substring(n.getUri().lastIndexOf(":")));
+                //String maVar = n.getUri() ;
+                //maVar = n.getUri().substring(n.getUri().lastIndexOf("/")) ;
+                addSharedArticlesViewed(n.getUri().substring(n.getUri().lastIndexOf("/")));
                 ContextCompat.startActivity(context,intent,null);
             }
         });

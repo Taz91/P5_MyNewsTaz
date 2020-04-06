@@ -1,24 +1,12 @@
 package com.syc.utils;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
-
-import com.syc.R;
-import com.syc.models.NotificationResponse;
-
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
-import androidx.core.app.NotificationCompat;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -43,7 +31,8 @@ public class Utils {
     private static Integer nArticlesMax;
     //nb Hits return
     private static Integer nNbHits;
-
+    //nb Notif return
+    private static Integer nNbNotif;
 
     //TODO: SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //TODO: regarder quelle est la date qui arrive ... est ce long en millisecondes ?
@@ -115,6 +104,14 @@ public class Utils {
                 .commit();
     }
 
+    public static Integer getnNbNotif(){return nNbNotif;}
+    public static void setnNbNotif(Integer pNotif){
+        Utils.nNbNotif = pNotif;
+        sharedPref
+                .edit()
+                .putInt("nbNotif", pNotif)
+                .commit();
+    }
 
     /**
      * load sharedPreferences
@@ -138,6 +135,10 @@ public class Utils {
         setSharedTopStoriesCategory(sharedPref.getString("sharedTopStoriesCategory","home"));
         //Initialize nArticlesViewed
         setnArticlesMax(sharedPref.getInt("nbArticles", 30));
+        //Initialize ArticlesViewed
+        setSharedArticlesViewed(sharedPref.getString("articleViewed",""));
+        //Initialize nbNotif
+        setnNbNotif(sharedPref.getInt("nbNotif",0));
         // reload with sharedPreferences modified
         sharedPref = context.getSharedPreferences(PREFS_SETTING, MODE_PRIVATE);
         return sharedPref;
@@ -186,6 +187,9 @@ public class Utils {
 
     public static String getSharedArticlesViewed() { return sharedArticlesViewed; }
     public static void setSharedArticlesViewed(String pArticlesViewed) {
+        sharedArticlesViewed = pArticlesViewed;
+    }
+    public static void addSharedArticlesViewed(String pArticlesViewed) {
         if(sharedPref.getString(PREFS_ARTICLESVIEWED,"").isEmpty()){
             sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + pArticlesViewed;
         }else{
@@ -202,7 +206,7 @@ public class Utils {
                 //build new sharedPref article viewed
                 //newSharedArticlesViewed = String.join(":",listArticlesViewed);
                 String newSharedArticlesViewed = "";
-                for (Iterator ite = listArticlesViewed.subList( beginIndex , listArticlesViewed.size() ).iterator(); ite.hasNext(); ){
+                for (Iterator ite = listArticlesViewed.subList( 0 , listArticlesViewed.size() ).iterator(); ite.hasNext(); ){
                     if(newSharedArticlesViewed.isEmpty()){
                         newSharedArticlesViewed = ite.next().toString();  // ite.next().toString()
                     }else{
@@ -253,6 +257,7 @@ public class Utils {
             .putInt("nNbHits", 0)
             .putString("fqNotif","")
             .putString("qNotif","french paris")
+            .putInt("nbNotif",0)
             .commit();
     }
 
@@ -281,6 +286,7 @@ public class Utils {
                 .remove("nNbHits")
                 .remove("fqNotif")
                 .remove("qNotif")
+                .remove("nbNotif")
                 .commit();
         setbRemoveSharedPref(false);
         sharedPrefLoadDefault();
