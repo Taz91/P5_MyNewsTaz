@@ -1,5 +1,4 @@
 package com.syc.ui.main;
-
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

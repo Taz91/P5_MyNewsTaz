@@ -1,10 +1,9 @@
 package com.syc;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
@@ -13,19 +12,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import static com.syc.utils.Utils.loadSharedPreferences;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private SharedPreferences sharedPref;
     //save if Notif or Search option status
     Boolean bNotifStatus = false;
     String sBuildFQ;
+    Integer root;
 
-    @BindView(R.id.fab) FloatingActionButton fab;
+    //@BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.searchactivity_appbarlayout) AppBarLayout searchactivity_appbarlayout;
     @BindView(R.id.searchactivity_toolbar) Toolbar searchactivity_toolbar;
     @BindView(R.id.searchactivity_Text) EditText searchactivity_text;
@@ -47,7 +50,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
-        // ========================================================== sharedPreferences
+
         // load sharedPreferences and use for Default display
         sharedPref = loadSharedPreferences(this);
         // ========================================================== toolbar
@@ -125,6 +128,63 @@ public class SearchActivity extends AppCompatActivity {
                 closeForm(true);
             }
         });
+
+        //DatePicker !!!!!
+        searchactivity_dateBegin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                root = 1;
+                showDatePickerDialog();
+            }
+        });
+        //DatePicker !!!!!
+        searchactivity_dateEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                root = 2;
+                showDatePickerDialog();
+            }
+        });
+    }
+
+    private void showDatePickerDialog(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                            this,
+                                            this,
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(year ,month , dayOfMonth);
+        SimpleDateFormat formater = new SimpleDateFormat("yyyyMMdd");
+        String setDate = formater.format(c.getTime());
+        if(root==1){
+            if(searchactivity_dateEnd.getText().toString().isEmpty()){
+                searchactivity_dateBegin.setText(setDate);
+            }else{
+                if(Integer.valueOf(searchactivity_dateEnd.getText().toString()) >= Integer.valueOf(setDate)){
+                    searchactivity_dateBegin.setText(setDate);
+                }else{
+                    Toast.makeText(getBaseContext(), "start date must be smaller than end date.", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        if(root==2){
+            if(searchactivity_dateBegin.getText().toString().isEmpty()){
+                searchactivity_dateEnd.setText(setDate);
+            }else{
+                if(Integer.valueOf(searchactivity_dateBegin.getText().toString()) <= Integer.valueOf(setDate)){
+                    searchactivity_dateEnd.setText(setDate);
+                }else{
+                    Toast.makeText(getBaseContext(), "start date must be smaller than end date.", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     /**

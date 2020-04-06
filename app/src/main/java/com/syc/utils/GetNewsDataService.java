@@ -2,11 +2,16 @@ package com.syc.utils;
 import com.syc.models.BusinessNYT;
 import com.syc.models.MostPopularNYT;
 import com.syc.models.NotificationLowData;
+import com.syc.models.SearchNYT;
 import com.syc.models.TopStoriesNYT;
+
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * @author Taz91
@@ -54,9 +59,12 @@ public interface GetNewsDataService {
     Call<BusinessNYT> getBusinessNews(@Query("fq") String fq, @Query("api-key") String userkey );
 
 
+    @GET("search/v2/articlesearch.json")
+    Call<SearchNYT> getSearchArticles(@QueryMap Map<String,String> parameters);
+    //("begin_date") String begin_date, @Query("end_date") String end_date, @Query("fq") String fq, @Query("q") String q, @Query("api-key") String userkey
 
     @GET("search/v2/articlesearch.json")
-    Call<NotificationLowData> getSearchArticles(@Query("begin_date") String begin_date, @Query("end_date") String end_date, @Query("fq") String fq, @Query("q") String q, @Query("api-key") String userkey );
+    Call<SearchNYT> getSearchArticles(@Query("begin_date") String begin_date, @Query("end_date") String end_date, @Query("fq") String fq, @Query("q") String q, @Query("api-key") String userkey );
     /*
     Search : 3 type de paramêtres :
             - dates deb / fin

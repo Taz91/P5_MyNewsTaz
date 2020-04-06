@@ -1,13 +1,9 @@
-package com.agilya.syc.tabbedactivity;
-
+package com.syc;
 import android.content.Context;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
-
 import static org.junit.Assert.assertEquals;
 
 /**

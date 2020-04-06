@@ -5,4 +5,5 @@
     <color name="colorPrimaryDark">#009faf</color>
     <color name="colorAccent">#b37b50</color>
     <color name="colorAccentTwo">#ffcca6</color>
+    <color name="colorItemViewed">#dbdce0</color>
 </resources>

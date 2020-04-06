@@ -11,15 +11,6 @@
     <string name="about">About</string>
     <string name="news_api_key">J0iJw0a8fdshubHztJsOJxEEg6hPstOG</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="strLogin">Login :</string>
-    <string name="strPwd">Password :</string>
-    <string name="strtxtDescro">saisir id</string>
-    <string name="strValider">Valider</string>
-    <string name="title_activity_tabs_test">TabsTest</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
     <string name="app_search">Search Articles</string>
 
     <string-array name="spinnerListAdapter">
@@ -47,4 +38,16 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <!--
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="strLogin">Login :</string>
+    <string name="strPwd">Password :</string>
+    <string name="strtxtDescro">saisir id</string>
+    <string name="strValider">Valider</string>
+    <string name="title_activity_tabs_test">TabsTest</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    -->
 </resources>
