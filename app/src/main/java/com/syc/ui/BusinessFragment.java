@@ -26,6 +26,9 @@ import java.util.List;
 import static com.syc.utils.Utils.getApiKey;
 
 /**
+ * Created by Chazette Sylvain
+ * content consumption of API NYT, with only the section 'Business'
+ *
  * A simple {@link Fragment} subclass.
  * Use the {@link BusinessFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -66,6 +69,11 @@ public class BusinessFragment extends Fragment {
         loadData();
     }
 
+    /**
+     * initializes the consumption of the API NYT - search
+     * service parameter : only fq( section: business)
+     *
+     */
     private void loadData() {
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
         //TODO: if time, include parameter in help Activity
@@ -87,8 +95,7 @@ public class BusinessFragment extends Fragment {
 
             @Override
             public void onFailure(Call<BusinessNYT> call, Throwable t) {
-                // TODO : if time, throw exception in differente case (item : preformated with img and text to inform)
-                Toast.makeText(getContext(), "No data found", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Error consumption of API NYT - Business", Toast.LENGTH_LONG).show();
             }
         });
     }

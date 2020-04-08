@@ -20,6 +20,13 @@ import butterknife.ButterKnife;
 import static com.syc.utils.Utils.addSharedArticlesViewed;
 import static com.syc.utils.Utils.isArticleViewed;
 
+/**
+ * Created by Chazette Sylvain
+ * Adapter of MostPopularFragment, with Most model,
+ * Click on image launch DetailActivity
+ * save the link of the article seen
+ *
+ */
 public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MyViewHolder> {
     //list of news
     private List<MostResult> myNews;

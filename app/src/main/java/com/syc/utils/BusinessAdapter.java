@@ -20,6 +20,13 @@ import butterknife.ButterKnife;
 import static com.syc.utils.Utils.addSharedArticlesViewed;
 import static com.syc.utils.Utils.isArticleViewed;
 
+/**
+ * Created by Chazette Sylvain
+ * Adapter of BusinessFragment, with Business model,
+ * Click on image launch DetailActivity
+ * save the link of the article seen
+ *
+ */
 public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.MyViewHolder> {
     //list of news
     private List<BusinessDoc> myNews;
@@ -102,7 +109,6 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.MyView
                 ContextCompat.startActivity(context,intent,null);
             }
         });
-
     }
 
     @Override

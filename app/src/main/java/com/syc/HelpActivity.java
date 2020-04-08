@@ -19,7 +19,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
-
 import static com.syc.utils.Utils.getSharedTopStoriesCategory;
 import static com.syc.utils.Utils.getnArticlesMax;
 import static com.syc.utils.Utils.loadSharedPreferences;
@@ -29,6 +28,14 @@ import static com.syc.utils.Utils.setnArticlesMax;
 import static com.syc.utils.Utils.sharedPref;
 import static com.syc.utils.Utils.sharedPrefRemove;
 
+/**
+ * Created by Chazette Sylvain
+ * this activity manages Help Menu :
+ * 2 spinner to choice : 1) section for TopStories Activity, 2) number of items read store in history
+ * switch button for remove sharedPref, with confirm button.
+ * method to manage remove sharedPref.
+ *
+ */
 public class HelpActivity extends AppCompatActivity {
     @BindView(R.id.helpactivity_appbarlayout) AppBarLayout helpactivity_appbarlayout;
     @BindView(R.id.helpactivity_toolbar) Toolbar helpactivity_toolbar;
@@ -50,7 +57,6 @@ public class HelpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //TODO: put in ressouces ?
         //data spinner - index and value - to preselect choice in spinner
         TreeMap<String,Integer> spinnerCategory = new TreeMap<>();
         spinnerCategory.put("arts",0);
@@ -61,7 +67,7 @@ public class HelpActivity extends AppCompatActivity {
         spinnerCategory.put("sports",5);
         spinnerCategory.put("travel",6);
 
-        //TODO:collection.AddAll ????
+        //TODO:collection.AddAll
         //construct list for spinner:
         List<String> spinnerList = new ArrayList<>();
         for(String s : spinnerCategory.keySet()){
@@ -74,7 +80,6 @@ public class HelpActivity extends AppCompatActivity {
         helpTopStoriesSpinnerChoice.setAdapter(spinnerListAdapter);
         //select in spinner the category saved or default (home)
         helpTopStoriesSpinnerChoice.setSelection(spinnerCategory.get(sharedPref.getString("sharedTopStoriesCategory", "home")));
-
         helpTopStoriesSpinnerChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

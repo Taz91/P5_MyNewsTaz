@@ -23,6 +23,13 @@ import butterknife.BindView;
 import static com.syc.utils.Utils.loadSetting;
 import static com.syc.utils.Utils.loadSharedPreferences;
 
+/**
+ * Created by Chazette Sylvain
+ *
+ *
+ *
+ *
+ */
 public class MainActivity extends AppCompatActivity {
     // =================================================================== shared_preferences :
     private SharedPreferences sharedPref;
@@ -179,11 +186,10 @@ public class MainActivity extends AppCompatActivity {
             //mWorkManager.enqueueUniqueWork("nyt_periodic", ExistingWorkPolicy.REPLACE, mRequest);
 
             // ================================================= Periodic request !!
-            PeriodicWorkRequest mRequest = new PeriodicWorkRequest.Builder( NotificationWorker.class,15, TimeUnit.MINUTES ).build();
+            PeriodicWorkRequest mRequest = new PeriodicWorkRequest.Builder( NotificationWorker.class,1, TimeUnit.DAYS ).build();
             //pull periodic job in queue
             mWorkManager.enqueueUniquePeriodicWork("nyt_periodic", ExistingPeriodicWorkPolicy.REPLACE, mRequest);
         }else{
-            //TODO: Stop the periodic Notification
             //mWorkManager.cancelAllWorkByTag("nyt_channel");
             mWorkManager.cancelUniqueWork("nyt_periodic");
         }

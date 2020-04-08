@@ -4,15 +4,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Created by Chazette Sylvain
+ * contains :
+ * sharedPreferences management, CRUD logical
+ * method to convert format date
+ * method to add articleViewed in sharedPref,
+ * method to load setting of Notification Activity (search with notification option)
+ * method to find if current article (in all RecyclerView) is viewed
+ * method to remove and preload sharedPref
+ */
 public class Utils {
     public static SharedPreferences sharedPref;
-    // =====================================================================
     //File Name
     private static final String PREFS_SETTING = "setting";
     //define key : apiKey
@@ -34,23 +43,16 @@ public class Utils {
     //nb Notif return
     private static Integer nNbNotif;
 
-    //TODO: SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    //TODO: regarder quelle est la date qui arrive ... est ce long en millisecondes ?
-    //TODO: si oui, prévoir la méthode en longToShortFR
-    //TODO: si oui, prévoir la méthode en shortToLongUS
-    //TODO:
-
-
     /**
-     * format date "yyyy-MM-dd" in "dd/MM/yyyy"
+     *
      * @param pDate
+     * @param pOldFormat example : "yyyy-MM-dd"
+     * @param pNewFormat example : "dd/MM/yyyy"
      * @return
      */
     public static String convertDate(String pDate, String pOldFormat, String pNewFormat){
         SimpleDateFormat oldFormatDate = new SimpleDateFormat(pOldFormat);
         SimpleDateFormat newFormatDate = new SimpleDateFormat(pNewFormat);
-        //SimpleDateFormat oldFormatDate = new SimpleDateFormat("yyyy-MM-dd");
-        //SimpleDateFormat newFormatDate = new SimpleDateFormat("dd/MM/yyyy");
 
         pDate = pDate.substring(0,10);
         try {
@@ -139,6 +141,12 @@ public class Utils {
         setSharedArticlesViewed(sharedPref.getString("articleViewed",""));
         //Initialize nbNotif
         setnNbNotif(sharedPref.getInt("nbNotif",0));
+        //Initialize BeginDate
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -5);
+        if(sharedPref.getString("NotifLastDate","").isEmpty()){
+            setsBeginDate(new SimpleDateFormat("yyyyMMdd").format(cal.getTime()));
+        }
         // reload with sharedPreferences modified
         sharedPref = context.getSharedPreferences(PREFS_SETTING, MODE_PRIVATE);
         return sharedPref;
@@ -234,7 +242,6 @@ public class Utils {
 
     /**
      * Initiate sharedPreferences
-     *
      */
     private static void sharedPrefLoadDefault(){
         sharedPref
@@ -263,7 +270,6 @@ public class Utils {
 
     /**
      * Remove sharedPreferences
-     *
      */
     public static void sharedPrefRemove(){
         sharedPref

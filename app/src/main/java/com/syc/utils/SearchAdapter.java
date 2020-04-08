@@ -20,6 +20,12 @@ import butterknife.ButterKnife;
 import static com.syc.utils.Utils.addSharedArticlesViewed;
 import static com.syc.utils.Utils.isArticleViewed;
 
+/**
+ * Created by Chazette Sylvain
+ * Adapter of DetailActivity, with Search model,
+ * launch a webview
+ *
+ */
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder> {
     //list of news
     private List<SearchDoc> myNews;
