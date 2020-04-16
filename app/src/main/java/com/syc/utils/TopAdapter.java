@@ -18,7 +18,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.RequestManager;
 import static com.syc.utils.Utils.addSharedArticlesViewed;
+import static com.syc.utils.Utils.getSharedArticlesViewed;
+import static com.syc.utils.Utils.getnArticlesMax;
 import static com.syc.utils.Utils.isArticleViewed;
+import static com.syc.utils.Utils.setSharedArticlesViewed;
 
 /**
  * Created by Chazette Sylvain
@@ -101,7 +104,8 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
         holder.itemCategory.setText(n.getCategory());
 
         String article = n.getUri().substring(n.getUri().lastIndexOf("/"));
-        if (isArticleViewed(article)) {
+        String articles = Utils.getSharedArticlesViewed();
+        if (isArticleViewed(article,articles)) {
             holder.itemView.setBackgroundColor(Color.parseColor("#dbdce0"));
         }
 
@@ -114,7 +118,11 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("articleUrl", n.getUrl());
-                addSharedArticlesViewed(n.getUri().substring(n.getUri().lastIndexOf("/")));
+                //addSharedArticlesViewed(n.getUri().substring(n.getUri().lastIndexOf("/")));
+                Integer nbMaxArticlesViewed = getnArticlesMax();
+                String articlesViewed = getSharedArticlesViewed() ;
+                String sharedArticlesViewed = addSharedArticlesViewed( articlesViewed, n.getUri().substring(n.getUri().lastIndexOf("/")), nbMaxArticlesViewed);
+                setSharedArticlesViewed(sharedArticlesViewed);
                 ContextCompat.startActivity(context,intent,null);
             }
         });

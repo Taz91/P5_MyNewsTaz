@@ -98,7 +98,7 @@ public class MostPopularFragment extends Fragment {
 
                 List<MostResult> result = response.body().getResults();
 
-                MostAdapter adapter = new MostAdapter(result , Glide.with(getView()), getContext());
+                MostAdapter adapter = new MostAdapter(result , Glide.with(getContext()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);

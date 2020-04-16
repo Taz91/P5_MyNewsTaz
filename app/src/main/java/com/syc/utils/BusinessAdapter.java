@@ -18,7 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import static com.syc.utils.Utils.addSharedArticlesViewed;
+import static com.syc.utils.Utils.getSharedArticlesViewed;
+import static com.syc.utils.Utils.getnArticlesMax;
 import static com.syc.utils.Utils.isArticleViewed;
+import static com.syc.utils.Utils.setSharedArticlesViewed;
 
 /**
  * Created by Chazette Sylvain
@@ -92,8 +95,8 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.MyView
         holder.itemCategory.setText(n.getCategory());
 
         String article = n.getUri().substring(n.getUri().lastIndexOf("/"));
-        //Boolean bOk = isArticleViewed(monArticle);
-        if (isArticleViewed(article)) {
+        String articles = Utils.getSharedArticlesViewed();
+        if (isArticleViewed(article,articles)) {
             holder.itemView.setBackgroundColor(Color.parseColor("#dbdce0"));
         }
 
@@ -105,7 +108,10 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.MyView
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("articleUrl", n.getWebUrl());
-                addSharedArticlesViewed(n.getUri().substring(n.getUri().lastIndexOf("/")));
+                Integer nbMaxArticlesViewed = getnArticlesMax();
+                String articlesViewed = getSharedArticlesViewed() ;
+                String sharedArticlesViewed = addSharedArticlesViewed( articlesViewed, n.getUri().substring(n.getUri().lastIndexOf("/")), nbMaxArticlesViewed);
+                setSharedArticlesViewed(sharedArticlesViewed);
                 ContextCompat.startActivity(context,intent,null);
             }
         });

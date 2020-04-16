@@ -5,21 +5,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.syc.ui.main.SectionsPagerAdapter;
 import com.google.android.material.appbar.AppBarLayout;
-import com.syc.utils.NotificationWorker;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import java.util.concurrent.TimeUnit;
 import androidx.viewpager.widget.ViewPager;
-import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 import butterknife.ButterKnife;
 import butterknife.BindView;
+import static com.syc.utils.Utils.creatNotification;
 import static com.syc.utils.Utils.loadSetting;
 import static com.syc.utils.Utils.loadSharedPreferences;
 
@@ -69,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //TODO : back searchActivity with NOTIF form option
         // =================================================================================================== back searchActivity - option NOTIF
         if(resultCode==1){
             if( data != null ){
@@ -77,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 loadSetting(data,false);
 
                 if( data.getBooleanExtra("switchNotif", false )){
-                    creatNotification(true);
+                    creatNotification(true,getApplicationContext());
                 }else{
-                    creatNotification(false);
+                    creatNotification(false,getApplicationContext());
                 }
             }
         }
@@ -171,27 +165,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void creatNotification(boolean pbGoNotif){
-        WorkManager mWorkManager = WorkManager.getInstance();
-
-        if( pbGoNotif){
-            // ================================================= One time request !!
-            Constraints contraintes = new Constraints.Builder ()
-                    //.setRequiresCharging (true)
-                    .setRequiresBatteryNotLow(true)
-                    .build ();
-
-            //OneTimeWorkRequest mRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class).build();
-            //pull unique job in queue
-            //mWorkManager.enqueueUniqueWork("nyt_periodic", ExistingWorkPolicy.REPLACE, mRequest);
-
-            // ================================================= Periodic request !!
-            PeriodicWorkRequest mRequest = new PeriodicWorkRequest.Builder( NotificationWorker.class,1, TimeUnit.DAYS ).build();
-            //pull periodic job in queue
-            mWorkManager.enqueueUniquePeriodicWork("nyt_periodic", ExistingPeriodicWorkPolicy.REPLACE, mRequest);
-        }else{
-            //mWorkManager.cancelAllWorkByTag("nyt_channel");
-            mWorkManager.cancelUniqueWork("nyt_periodic");
-        }
-    }
 }

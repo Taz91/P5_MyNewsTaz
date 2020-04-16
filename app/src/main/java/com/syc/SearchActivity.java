@@ -60,7 +60,7 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
         ButterKnife.bind(this);
 
         // load sharedPreferences and use for Default display
-        sharedPref = loadSharedPreferences(this);
+        sharedPref = loadSharedPreferences( this);
         // ========================================================== toolbar
         setSupportActionBar(searchactivity_toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

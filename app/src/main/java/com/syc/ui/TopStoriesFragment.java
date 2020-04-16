@@ -89,7 +89,7 @@ public class TopStoriesFragment extends Fragment {
             public void onResponse(Call<TopStoriesNYT> call, Response<TopStoriesNYT> response) {
                 List<TopResult> result = response.body().getResults();
 
-                TopAdapter adapter = new TopAdapter(result , Glide.with(getView()), getContext());
+                TopAdapter adapter = new TopAdapter(result , Glide.with(getContext()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);

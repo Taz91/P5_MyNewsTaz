@@ -86,7 +86,7 @@ public class BusinessFragment extends Fragment {
                 BusinessResponse businessResponse = response.body().getResponse();
                 List<BusinessDoc> result = businessResponse.getDocs();
 
-                BusinessAdapter adapter = new BusinessAdapter(result , Glide.with(getView()), getContext());
+                BusinessAdapter adapter = new BusinessAdapter(result , Glide.with(getContext()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);

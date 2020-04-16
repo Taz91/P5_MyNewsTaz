@@ -4,6 +4,7 @@ import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.appbar.AppBarLayout;
+import com.syc.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -23,9 +26,9 @@ import static com.syc.utils.Utils.getSharedTopStoriesCategory;
 import static com.syc.utils.Utils.getnArticlesMax;
 import static com.syc.utils.Utils.loadSharedPreferences;
 import static com.syc.utils.Utils.setSharedTopStoriesCategory;
-import static com.syc.utils.Utils.setbRemoveSharedPref;
+//import static com.syc.utils.Utils.setbRemoveSharedPref;
 import static com.syc.utils.Utils.setnArticlesMax;
-import static com.syc.utils.Utils.sharedPref;
+import static com.syc.utils.Utils.sharedPrefLoadDefault;
 import static com.syc.utils.Utils.sharedPrefRemove;
 
 /**
@@ -47,38 +50,31 @@ public class HelpActivity extends AppCompatActivity {
     @BindView(R.id.helpactivity_remove_confirm_yes) RadioButton helpactivity_confirm_yes;
     @BindView(R.id.helpactivity_articlesviewed_spinner) Spinner helpactivity_articlesviewed_spinner;
 
+    private SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         ButterKnife.bind(this);
 
+        sharedPref = Utils.loadSharedPreferences(getApplicationContext());
+
         setSupportActionBar(helpactivity_toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //data spinner - index and value - to preselect choice in spinner
-        TreeMap<String,Integer> spinnerCategory = new TreeMap<>();
-        spinnerCategory.put("arts",0);
-        spinnerCategory.put("business",1);
-        spinnerCategory.put("home",2);
-        spinnerCategory.put("movies",3);
-        spinnerCategory.put("politics",4);
-        spinnerCategory.put("sports",5);
-        spinnerCategory.put("travel",6);
-
-        //TODO:collection.AddAll
-        //construct list for spinner:
-        List<String> spinnerList = new ArrayList<>();
-        for(String s : spinnerCategory.keySet()){
-            spinnerList.add(s);
-        }
+        TreeMap<String,Integer> spinnerCategory = helpBuildTreeMapForSpinnerList();
+        List<String> spinnerList = helpBuildListForSpinnerSection(spinnerCategory);
 
         ArrayAdapter<String> spinnerListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, spinnerList);
         spinnerListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         helpTopStoriesSpinnerChoice.setAdapter(spinnerListAdapter);
         //select in spinner the category saved or default (home)
+
+
+        String test = sharedPref.getString("sharedTopStoriesCategory", "home");
         helpTopStoriesSpinnerChoice.setSelection(spinnerCategory.get(sharedPref.getString("sharedTopStoriesCategory", "home")));
         helpTopStoriesSpinnerChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -106,7 +102,6 @@ public class HelpActivity extends AppCompatActivity {
         articlesViewedSpinnerListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         helpactivity_articlesviewed_spinner.setAdapter(articlesViewedSpinnerListAdapter);
-
         // select in spinner nb articles saved or default (30)
         helpactivity_articlesviewed_spinner.setSelection(spinnerNbArticles.get(String.valueOf(sharedPref.getInt("nbArticles",30))));
 
@@ -145,10 +140,11 @@ public class HelpActivity extends AppCompatActivity {
         int rgCheckedId = helpactivity_confirm_rg.getCheckedRadioButtonId();
         if (rgCheckedId == R.id.helpactivity_remove_confirm_yes) {
             //Confirmed Remove sharedPreferences !!
-            setbRemoveSharedPref(true);
-            sharedPrefRemove();
-            loadSharedPreferences(getBaseContext());
-            Toast.makeText(getBaseContext(), "Parameter are initialized", Toast.LENGTH_LONG).show();
+            //setbRemoveSharedPref(true);
+            sharedPref = sharedPrefRemove();
+            sharedPref = sharedPrefLoadDefault();
+            sharedPref = loadSharedPreferences(getApplicationContext());
+            Toast.makeText(getApplicationContext(), "Parameter are initialized", Toast.LENGTH_LONG).show();
             helpactivity_confirm_no.setChecked(true);
             buttonRemoveSharedPref.setChecked(false);
             helpactivity_removelabel.setVisibility(View.INVISIBLE);
@@ -191,6 +187,39 @@ public class HelpActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    /**
+     * build treeMap of category
+     * @return
+     */
+    private TreeMap<String,Integer> helpBuildTreeMapForSpinnerList(){
+        //data spinner - index and value - to preselect choice in spinner
+        TreeMap<String,Integer> spinnerCategory = new TreeMap<>();
+        spinnerCategory.put("arts",0);
+        spinnerCategory.put("business",1);
+        spinnerCategory.put("home",2);
+        spinnerCategory.put("movies",3);
+        spinnerCategory.put("politics",4);
+        spinnerCategory.put("sports",5);
+        spinnerCategory.put("travel",6);
+        return spinnerCategory;
+    }
+
+    /**
+     * build list to spinner choice category
+     * @param pspinnerCategory
+     * @return
+     */
+    private List<String> helpBuildListForSpinnerSection(TreeMap<String,Integer> pspinnerCategory){
+
+        //TODO:collection.AddAll
+        //construct list for spinner:
+        List<String> spinnerList = new ArrayList<>();
+        for(String s : pspinnerCategory.keySet()){
+            spinnerList.add(s);
+        }
+        return spinnerList;
     }
 
 }

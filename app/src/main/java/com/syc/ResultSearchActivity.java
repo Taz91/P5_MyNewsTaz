@@ -103,16 +103,16 @@ public class ResultSearchActivity extends AppCompatActivity {
                 SearchResponse searchResponse = response.body().getResponse();
                 List<SearchDoc> result = searchResponse.getDocs();
 
-                SearchAdapter adapter = new SearchAdapter(result , Glide.with(getApplicationContext()), getApplicationContext());
+                SearchAdapter adapter = new SearchAdapter(result , Glide.with(getBaseContext()), getApplicationContext());
 
-                LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+                LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);
                 rvList.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<SearchNYT> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Error consumption of API NYT - SearchResult", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Error consumption of API NYT - SearchResult", Toast.LENGTH_LONG).show();
             }
         });
     }
