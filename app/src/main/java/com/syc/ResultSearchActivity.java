@@ -24,12 +24,16 @@ import com.syc.utils.SearchAdapter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static com.syc.utils.Utils.getApiKey;
 import static com.syc.utils.Utils.loadSharedPreferences;
 
+/**
+ * Created by Chazette Sylvain
+ * Activity to show the result of personnal search
+ * launch when click on magnifying glass in MainActivity.
+ *
+ */
 public class ResultSearchActivity extends AppCompatActivity {
-    // =================================================================== shared_preferences :
     private SharedPreferences sharedPref;
     @BindView(R.id.resultsearchactivity_toolbar) Toolbar resultsearchactivity_toolbar;
     @BindView(R.id.rv_list) RecyclerView rvList;
@@ -55,6 +59,11 @@ public class ResultSearchActivity extends AppCompatActivity {
         loadData(intent);
     }
 
+    /**
+     * initializes the consumption of the API NYT - search
+     * service parameter : // q (words)  /  fq (sections)  /  beginDate  /  endDate
+     *
+     */
     private void loadData(Intent intent) {
         String beginDate = "";
         String endDate = "";
@@ -83,7 +92,7 @@ public class ResultSearchActivity extends AppCompatActivity {
         }
 
         parameters.put("api-key", getApiKey());
-        // q  /  fq  /  beginDate  /  endDate
+
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
         Call<SearchNYT> call = newsDataService.getSearchArticles( parameters );
 
@@ -94,25 +103,22 @@ public class ResultSearchActivity extends AppCompatActivity {
                 SearchResponse searchResponse = response.body().getResponse();
                 List<SearchDoc> result = searchResponse.getDocs();
 
-                SearchAdapter adapter = new SearchAdapter(result , Glide.with(getApplicationContext()), getApplicationContext());
+                SearchAdapter adapter = new SearchAdapter(result , Glide.with(getBaseContext()), getApplicationContext());
 
-                LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+                LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);
                 rvList.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<SearchNYT> call, Throwable t) {
-                // TODO : gestion message de retour : soit le site est inaccessible
-                // y mettre une image ou un fragment spécifique ?
-
-                Toast.makeText(getApplicationContext(), "Une erreur", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Error consumption of API NYT - SearchResult", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     /**
-     *
+     * Search Result : user dont launch search result, like escape activity
      * @param item, back activity
      * @return
      */

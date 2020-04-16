@@ -25,12 +25,14 @@ import java.util.List;
 import static com.syc.utils.Utils.getApiKey;
 
 /**
+ * Created by Chazette Sylvain
+ * content consumption of API NYT - MostPopular, with only viewed - 7 day
+ *
  * A simple {@link Fragment} subclass.
  * Use the {@link MostPopularFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class MostPopularFragment extends Fragment {
-    //private static String API_KEY = "J0iJw0a8fdshubHztJsOJxEEg6hPstOG";
     @BindView(R.id.rv_list) RecyclerView rvList;
 
     public MostPopularFragment() {
@@ -66,6 +68,11 @@ public class MostPopularFragment extends Fragment {
         loadData();
     }
 
+    /**
+     * initializes the consumption of the API NYT - mostpopular
+     * service parameter : only viewed - 7 day
+     *
+     */
     private void loadData() {
         GetNewsDataService newsDataService = RetrofitInstance.getRetrofitInstance().create(GetNewsDataService.class);
         Call<MostPopularNYT> call = newsDataService.getPopularNews( getApiKey());
@@ -78,22 +85,20 @@ public class MostPopularFragment extends Fragment {
                 https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=yourkey
                 https://api.nytimes.com/svc/mostpopular/v2/shared/1.json?api-key=yourkey
                 */
-
                 /*
                 MostPopular : 3 types (emailed/viewed/shared), periode 1,7,30j
                 https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=yourkey
                 https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=yourkey
                 */
 
-
         call.enqueue(new Callback<MostPopularNYT>(){
 
             @Override
             public void onResponse(Call<MostPopularNYT> call, Response<MostPopularNYT> response) {
 
-                List<MostResult> result = response.body().getResults()  ; //getResults();
+                List<MostResult> result = response.body().getResults();
 
-                MostAdapter adapter = new MostAdapter(result , Glide.with(getView()), getContext());
+                MostAdapter adapter = new MostAdapter(result , Glide.with(getContext()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);
@@ -102,11 +107,8 @@ public class MostPopularFragment extends Fragment {
 
             @Override
             public void onFailure(Call<MostPopularNYT> call, Throwable t) {
-                // TODO : gestion message de retour : soit le site est inaccessible
-                // y mettre une image ou un fragment spécifique ?
-                Toast.makeText(getContext(), "Une erreur", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Error consumption of API NYT - Mostpopular", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 }

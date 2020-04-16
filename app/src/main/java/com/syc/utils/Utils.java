@@ -1,18 +1,40 @@
 package com.syc.utils;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+import com.syc.R;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.concurrent.TimeUnit;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Created by Chazette Sylvain
+ * contains :
+ * sharedPreferences management, CRUD logical
+ * method to convert format date
+ * method to add articleViewed in sharedPref,
+ * method to load setting of Notification Activity (search with notification option)
+ * method to find if current article (in all RecyclerView) is viewed
+ * method to remove and preload sharedPref
+ */
 public class Utils {
     public static SharedPreferences sharedPref;
-    // =====================================================================
     //File Name
     private static final String PREFS_SETTING = "setting";
     //define key : apiKey
@@ -34,23 +56,16 @@ public class Utils {
     //nb Notif return
     private static Integer nNbNotif;
 
-    //TODO: SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    //TODO: regarder quelle est la date qui arrive ... est ce long en millisecondes ?
-    //TODO: si oui, prévoir la méthode en longToShortFR
-    //TODO: si oui, prévoir la méthode en shortToLongUS
-    //TODO:
-
-
     /**
-     * format date "yyyy-MM-dd" in "dd/MM/yyyy"
+     * convert string date with old format and return the new format
      * @param pDate
+     * @param pOldFormat example : "yyyy-MM-dd"
+     * @param pNewFormat example : "dd/MM/yyyy"
      * @return
      */
     public static String convertDate(String pDate, String pOldFormat, String pNewFormat){
         SimpleDateFormat oldFormatDate = new SimpleDateFormat(pOldFormat);
         SimpleDateFormat newFormatDate = new SimpleDateFormat(pNewFormat);
-        //SimpleDateFormat oldFormatDate = new SimpleDateFormat("yyyy-MM-dd");
-        //SimpleDateFormat newFormatDate = new SimpleDateFormat("dd/MM/yyyy");
 
         pDate = pDate.substring(0,10);
         try {
@@ -75,9 +90,6 @@ public class Utils {
             .putString("sharedTopStoriesCategory", sharedTopStoriesCategory)
             .commit();
     }
-
-    public static Boolean getbRemoveSharedPref() { return bRemoveSharedPref; }
-    public static void setbRemoveSharedPref(Boolean bRemoveSharedPref) { Utils.bRemoveSharedPref = bRemoveSharedPref; }
 
     public static Integer getnArticlesMax() { return nArticlesMax; }
     public static void setnArticlesMax(Integer nArticlesMax) {
@@ -139,6 +151,12 @@ public class Utils {
         setSharedArticlesViewed(sharedPref.getString("articleViewed",""));
         //Initialize nbNotif
         setnNbNotif(sharedPref.getInt("nbNotif",0));
+        //Initialize BeginDate
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -5);
+        if(sharedPref.getString("NotifLastDate","").isEmpty()){
+            setsBeginDate(new SimpleDateFormat("yyyyMMdd").format(cal.getTime()));
+        }
         // reload with sharedPreferences modified
         sharedPref = context.getSharedPreferences(PREFS_SETTING, MODE_PRIVATE);
         return sharedPref;
@@ -188,17 +206,21 @@ public class Utils {
     public static String getSharedArticlesViewed() { return sharedArticlesViewed; }
     public static void setSharedArticlesViewed(String pArticlesViewed) {
         sharedArticlesViewed = pArticlesViewed;
+        sharedPref
+                .edit()
+                .putString(PREFS_ARTICLESVIEWED, sharedArticlesViewed)
+                .commit();
     }
-    public static void addSharedArticlesViewed(String pArticlesViewed) {
-        if(sharedPref.getString(PREFS_ARTICLESVIEWED,"").isEmpty()){
-            sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + pArticlesViewed;
+
+    public static String addSharedArticlesViewed(String pArticleViewed, String psharedArticlesViewed, Integer nbArticlesSave) {
+        if(psharedArticlesViewed.isEmpty()){
+            psharedArticlesViewed += pArticleViewed;
         }else{
             //Get all artilces viewed
-            sharedArticlesViewed = sharedPref.getString(PREFS_ARTICLESVIEWED,"") + ":" + pArticlesViewed;
-            //get limite of nb articles storage
-            Integer nbArticlesSave = getnArticlesMax();//sharedPref.getInt("nbArticles",30) ;
+            psharedArticlesViewed = psharedArticlesViewed + ":" + pArticleViewed;
             //Explode in list, to delete over limit
-            List<String> listArticlesViewed = Arrays.asList(sharedArticlesViewed.split(":"));
+            List<String> listArticlesViewed = Arrays.asList(psharedArticlesViewed.split(":"));
+
             if( listArticlesViewed.size() > nbArticlesSave ){
                 //Delete element are not necessary, low index (first in, first out)
                 Integer beginIndex = listArticlesViewed.size()-nbArticlesSave;;
@@ -213,13 +235,10 @@ public class Utils {
                         newSharedArticlesViewed += ":" + ite.next().toString();
                     }
                 }
-                sharedArticlesViewed = newSharedArticlesViewed;
+                psharedArticlesViewed = newSharedArticlesViewed;
             }
         }
-        sharedPref
-                .edit()
-                .putString(PREFS_ARTICLESVIEWED, sharedArticlesViewed)
-                .commit();
+        return psharedArticlesViewed;
     }
 
     /**
@@ -227,16 +246,14 @@ public class Utils {
      * @param pArticle
      * @return
      */
-    public static boolean isArticleViewed(String pArticle){
-
-        return (getSharedArticlesViewed().indexOf(pArticle) !=-1 ) ? true : false;
+    public static boolean isArticleViewed(String pArticle, String pArticles){
+        return (pArticles.indexOf(pArticle) !=-1 ) ? true : false;
     }
 
     /**
      * Initiate sharedPreferences
-     *
      */
-    private static void sharedPrefLoadDefault(){
+    public static SharedPreferences sharedPrefLoadDefault(){
         sharedPref
             .edit()
             .putString("apiKey","J0iJw0a8fdshubHztJsOJxEEg6hPstOG")
@@ -259,13 +276,13 @@ public class Utils {
             .putString("qNotif","french paris")
             .putInt("nbNotif",0)
             .commit();
+        return sharedPref;
     }
 
     /**
      * Remove sharedPreferences
-     *
      */
-    public static void sharedPrefRemove(){
+    public static SharedPreferences sharedPrefRemove(){
         sharedPref
                 .edit()
                 .remove("apiKey")
@@ -288,8 +305,110 @@ public class Utils {
                 .remove("qNotif")
                 .remove("nbNotif")
                 .commit();
-        setbRemoveSharedPref(false);
-        sharedPrefLoadDefault();
+        return sharedPref;
+        //setbRemoveSharedPref(false);
+        //sharedPrefLoadDefault();
     }
 
+    /**
+     * to create a Periodic notification
+     * @param pbGoNotif
+     * @param pcontext
+     */
+    public static void creatNotification(boolean pbGoNotif, Context pcontext){
+        //pcontext.getApplicationContext();
+        WorkManager mWorkManager = WorkManager.getInstance(pcontext);
+
+        if( pbGoNotif){
+            Constraints contraintes = new Constraints.Builder ()
+                    .setRequiresBatteryNotLow(true)
+                    .build ();
+                    //.setRequiresCharging (true)
+            /*
+            // ================================================= One time request !!
+            OneTimeWorkRequest mRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                    .setInitialDelay(5,TimeUnit.MINUTES)
+                    .build();
+            //pull unique job in queue
+            mWorkManager.enqueueUniqueWork("nyt_periodic", ExistingWorkPolicy.REPLACE, mRequest);
+            */
+
+            // ================================================= Periodic request !!
+            //Get delay duration in minute
+            Long delay = Utils.buildDelayDuration();
+
+            PeriodicWorkRequest mRequest = new PeriodicWorkRequest.Builder(
+                    NotificationWorker.class,
+                    1,
+                    TimeUnit.DAYS,
+                    PeriodicWorkRequest.MIN_PERIODIC_FLEX_MILLIS,
+                    TimeUnit.MILLISECONDS)
+                    .setInitialDelay(delay,TimeUnit.MINUTES)
+                    .build();
+            //pull periodic job in queue
+            mWorkManager.enqueueUniquePeriodicWork("nyt_periodic", ExistingPeriodicWorkPolicy.REPLACE, mRequest);
+
+        }else{
+            //mWorkManager.cancelAllWorkByTag("nyt_channel");
+            mWorkManager.cancelUniqueWork("nyt_periodic");
+        }
+    }
+
+    /**
+     * launch notification with options, message content number of hits
+     * @param title
+     * @param message
+     * @param pcontext
+     */
+    public static void showNotification(String title, String message, Context pcontext) {
+        pcontext.getApplicationContext();
+        NotificationManager manager = (NotificationManager) pcontext.getSystemService(Context.NOTIFICATION_SERVICE);
+        String channelId = "nyt_channel";
+        String channelName = "nyt_name";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            // Option of Notif :
+            //channel.enableLights(true);
+            //channel.setLightColor(Color.RED);
+            //channel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+            //channel.enableVibration(true);
+            //channel.setShowBadge( true );
+            //channel.setLockscreenVisibility( Notification.VISIBILITY_PUBLIC );
+
+            manager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(pcontext, channelId)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true) //when user tips on, notif is delete
+                .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+                .setSmallIcon(R.mipmap.nyt_21x21);
+        manager.notify(1, builder.build());
+    }
+
+    /**
+     * @return Calendar, target date launch notification
+     */
+    public static Long buildDelayDuration(){
+        Calendar dCalDateDebut = Calendar.getInstance();
+        Calendar dCalDateFin = Calendar.getInstance();
+        dCalDateFin.set(Calendar.HOUR_OF_DAY, 9);
+        dCalDateFin.set(Calendar.MINUTE, 0);
+        dCalDateFin.set(Calendar.SECOND, 0);
+        dCalDateFin.set(Calendar.DAY_OF_MONTH, dCalDateDebut.get(Calendar.DAY_OF_MONTH));
+
+        long diffMillis = (dCalDateFin.getTimeInMillis() - dCalDateDebut.getTimeInMillis())/60/1000;
+
+        //Calculate difference between now and
+        if(diffMillis < 5){
+            dCalDateFin.add(Calendar.DATE,1);
+        }
+        diffMillis = (dCalDateFin.getTimeInMillis() - dCalDateDebut.getTimeInMillis())/60/1000;
+
+        return diffMillis;
+    }
+
+    //public static Boolean getbRemoveSharedPref() { return bRemoveSharedPref; }
+    //public static void setbRemoveSharedPref(Boolean bRemoveSharedPref) { Utils.bRemoveSharedPref = bRemoveSharedPref; }
 }

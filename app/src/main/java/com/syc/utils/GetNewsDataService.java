@@ -4,9 +4,7 @@ import com.syc.models.MostPopularNYT;
 import com.syc.models.NotificationLowData;
 import com.syc.models.SearchNYT;
 import com.syc.models.TopStoriesNYT;
-
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -14,8 +12,9 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
- * @author Taz91
- * Created at 2019-10-25
+ * Created by Chazette Sylvain
+ * Interface to define all root of consumption API NYT
+ *
  */
 public interface GetNewsDataService {
     /**

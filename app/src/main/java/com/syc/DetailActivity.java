@@ -6,6 +6,7 @@ import butterknife.ButterKnife;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.webkit.WebView;
+//import android.view.View;
 import com.google.android.material.appbar.AppBarLayout;
 
 /**

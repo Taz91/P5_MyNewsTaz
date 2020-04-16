@@ -21,6 +21,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import static com.syc.utils.Utils.loadSharedPreferences;
 
+/**
+ * Activity Search with 2 options : Notification / manage Search
+ * management of display and control differences, date / enable notification, common control.
+ * root differences, back menu for notification validate choice, for search cancel choice.
+ * use one datepicker for 2 date (root variable to differentiate),
+ *
+ *
+ */
 public class SearchActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private SharedPreferences sharedPref;
     //save if Notif or Search option status
@@ -42,7 +50,7 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
     @BindView(R.id.cb_politics) CheckBox cbPolitics;
     @BindView(R.id.cb_sports) CheckBox cbSport;
     @BindView(R.id.cb_travel) CheckBox cbTravel;
-    @BindView(R.id.searchactivity_search) Button searchactivity_search;
+    @BindView(R.id.searchactivity_search) Button searchactivity_gosearch;
     @BindView(R.id.searchactivity_go_notif) Switch searchactivity_GoNotif;
 
     @Override
@@ -52,7 +60,7 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
         ButterKnife.bind(this);
 
         // load sharedPreferences and use for Default display
-        sharedPref = loadSharedPreferences(this);
+        sharedPref = loadSharedPreferences( this);
         // ========================================================== toolbar
         setSupportActionBar(searchactivity_toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -63,7 +71,7 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
         if(intent != null  ){
             if(intent.hasExtra("bNotif") && intent.getBooleanExtra("bNotif", true)){
                 //Notification view
-                searchactivity_search.setVisibility(View.GONE);
+                searchactivity_gosearch.setVisibility(View.GONE);
                 searchactivity_dateBegin.setVisibility(View.GONE);
                 searchactivity_dateBeginLabel.setVisibility(View.GONE);
                 searchactivity_dateEnd.setVisibility(View.GONE);
@@ -95,7 +103,7 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
                 }
             }else{
                 //Search view
-                searchactivity_search.setVisibility(View.VISIBLE);
+                searchactivity_gosearch.setVisibility(View.VISIBLE);
                 searchactivity_dateBegin.setVisibility(View.VISIBLE);
                 searchactivity_dateBeginLabel.setVisibility(View.VISIBLE);
                 searchactivity_dateEnd.setVisibility(View.VISIBLE);
@@ -120,16 +128,15 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
          * click on button Search, get params, start activity Search
          *
          */
-        searchactivity_search.setOnClickListener(new View.OnClickListener() {
+        searchactivity_gosearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean bOk = false;
                 //back to button search in form Search Option
                 closeForm(true);
             }
         });
 
-        //DatePicker !!!!!
+        // ========================================================== DatePicker - beginDate / endDate
         searchactivity_dateBegin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,7 +144,6 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
                 showDatePickerDialog();
             }
         });
-        //DatePicker !!!!!
         searchactivity_dateEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,12 +274,10 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
             SearchActivity.this.setResult(nResultCode,back);
             SearchActivity.this.finish();
         }
-        //TODO : doit on tester s'il n'y a pas de retour de Response ? (car si vide le RV sera vide ... et donc prévenir avant d'y retourner de changer des choses .
-        //TODO : DatePicker ou autre format ? spinner date ou list de date ?
     }
 
     /**
-     * String with all section checked
+     * build string with all section checked
      * @return
      */
     private String buildSectionSeleted(){

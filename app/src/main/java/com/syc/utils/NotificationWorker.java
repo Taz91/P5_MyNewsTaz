@@ -1,20 +1,13 @@
 package com.syc.utils;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.text.TextUtils;
 import android.widget.Toast;
-import com.syc.R;
 import com.syc.models.NotificationLowData;
 import com.syc.models.NotificationResponse;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -23,10 +16,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import static com.syc.utils.Utils.getApiKey;
 import static com.syc.utils.Utils.getnNbHits;
-import static com.syc.utils.Utils.getnNbNotif;
 import static com.syc.utils.Utils.loadSharedPreferences;
 import static com.syc.utils.Utils.setnNbHits;
 import static com.syc.utils.Utils.setsBeginDate;
+import static com.syc.utils.Utils.showNotification;
 
 /**
  * Created by Chazette Sylvain
@@ -90,13 +83,13 @@ public class NotificationWorker extends Worker {
                     //put in sharedPref
                     setnNbHits(nHits);
                     // reload sharedPreferences and use for Default display
-                    sharedPref = loadSharedPreferences(getApplicationContext());
+                    sharedPref = loadSharedPreferences( getApplicationContext());
 
                     if (getnNbHits()>0) {
                         //TODO: uncomment for test
                         //showNotification("New York Times",  getnNbHits().toString() + " New actuality for you !!  : " + getnNbNotif().toString() );
                         //TODO: comment for test
-                        showNotification("New York Times",  getnNbHits().toString() + " New actuality for you !!" );
+                        showNotification("New York Times",  getnNbHits().toString() + " New actuality for you !!", getApplicationContext() );
                         //store new begin date for the next time
                         setsBeginDate(new SimpleDateFormat("yyyyMMdd").format(new Date()));
                         //put message in taskDataString
@@ -112,51 +105,4 @@ public class NotificationWorker extends Worker {
         });
     }
 
-    /**
-     * launch notification with options, message content number of hits
-     * @param title
-     * @param message
-     */
-    private void showNotification(String title, String message) {
-        NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        String channelId = "nyt_channel";
-        String channelName = "nyt_name";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            // Option of Notif :
-            //channel.enableLights(true);
-            //channel.setLightColor(Color.RED);
-            //channel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            //channel.enableVibration(true);
-            //channel.setShowBadge( true );
-            //channel.setLockscreenVisibility( Notification.VISIBILITY_PUBLIC );
-
-            manager.createNotificationChannel(channel);
-        }
-
-        Calendar dCalDateDebut = Calendar.getInstance();
-        Calendar dCalDateFin = Calendar.getInstance();
-
-        dCalDateFin.set(Calendar.HOUR_OF_DAY, 21);
-        dCalDateFin.set(Calendar.MINUTE, 0);
-        dCalDateFin.set(Calendar.SECOND, 0);
-        System.out.println(dCalDateFin.getTime());
-
-        long diffMillis = (dCalDateFin.getTimeInMillis() - dCalDateDebut.getTimeInMillis())/60/1000;
-
-        //Calculate difference between now and
-        if(diffMillis < 2){
-            dCalDateFin.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_MONTH+1);
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelId)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true) //when user tips on, notif is delete
-                .setWhen(dCalDateFin.getTimeInMillis())
-                .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
-                .setSmallIcon(R.mipmap.nyt_21x21);
-                //.setSmallIcon(R.drawable.nyt_21x21); //ic_launcher
-        manager.notify(1, builder.build());
-    }
 }

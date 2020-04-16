@@ -25,9 +25,10 @@ import java.util.List;
 import static com.syc.utils.Utils.getApiKey;
 import static com.syc.utils.Utils.getSharedTopStoriesCategory;
 
-//TODO : mettre les commentaires en place !!
-
 /**
+ * Created by Chazette Sylvain
+ * content consumption of API NYT - Topstories, with only the section chosen in help menu
+ *
  * A simple {@link Fragment} subclass.
  * Use the {@link TopStoriesFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -68,6 +69,11 @@ public class TopStoriesFragment extends Fragment {
         loadData();
     }
 
+    /**
+     * initializes the consumption of the API NYT - topstories
+     * service parameter : only chosen section (by help menu)
+     *
+     */
     private void loadData() {
          /*
         TopStories  : https://api.nytimes.com/svc/topstories/v2/science.json?api-key=yourkey
@@ -83,7 +89,7 @@ public class TopStoriesFragment extends Fragment {
             public void onResponse(Call<TopStoriesNYT> call, Response<TopStoriesNYT> response) {
                 List<TopResult> result = response.body().getResults();
 
-                TopAdapter adapter = new TopAdapter(result , Glide.with(getView()), getContext());
+                TopAdapter adapter = new TopAdapter(result , Glide.with(getContext()), getContext());
 
                 LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 rvList.setLayoutManager(verticalLayoutManager);
@@ -92,10 +98,7 @@ public class TopStoriesFragment extends Fragment {
 
             @Override
             public void onFailure(Call<TopStoriesNYT> call, Throwable t) {
-                // TODO : gestion message de retour : soit le site est inaccessible
-                // y mettre une image ou un fragment spécifique ?
-
-                Toast.makeText(getContext(), "Une erreur", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Error consumption of API NYT - TopStories", Toast.LENGTH_LONG).show();
             }
         });
     }
