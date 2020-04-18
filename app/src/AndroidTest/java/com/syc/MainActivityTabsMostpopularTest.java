@@ -20,13 +20,13 @@ import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 //@RunWith(androidx.test.ext.junit.runners.AndroidJUnit4.class)
-public class MainActivityTest {
+public class MainActivityTabsMostpopularTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest() {
+    public void mainActivityMostpopularTest() {
         ViewInteraction tabView = onView(
                 allOf(withContentDescription("MOST POPULAR"),
                         childAtPosition(

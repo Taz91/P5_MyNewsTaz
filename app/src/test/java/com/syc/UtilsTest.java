@@ -12,23 +12,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class UtilsTest {
-    private final Context context = Mockito.mock(Context.class);
-    private SharedPreferences sharedPref;
+    //private final Context context = Mockito.mock(Context.class);
+    //private SharedPreferences sharedPref;
     //private SharedPreferences.Editor editor;
 
     @Before
     public void before() throws Exception {
-        sharedPref = Mockito.mock(SharedPreferences.class);
-        //Mockito.when(sharedPreferences.getSharedPreferences(anyString(), anyInt())).thenReturn(sharedPreferences);
-        //sharedPref = context.getSharedPreferences("sessionTest", Context.MODE_PRIVATE);
-        //mockNotificationBuilderProvider = Mockito.mock(NotificationBuilderProvider.class);
-        //mockNotificationBuilder = Mockito.mock(NotificationCompat.Builder.class, RETURNS_SELF);
-        //mockNotifyManager = Mockito.mock(NotificationManager.class);
+        //sharedPref = Mockito.mock(SharedPreferences.class);
+        //sharedPref.edit().putString("sharedTopStoriesCategory","business").commit();
     }
     @Test
     public void utilsTopStoriesSection() throws Exception{
 
-        String topSection = sharedPref.getString("sharedTopStoriesCategory","home");
+        String topSection = "business";
 
         //data spinner - index and value - to preselect choice in spinner
         TreeMap<String,Integer> spinnerCategory = new TreeMap<>();

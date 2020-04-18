@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.google.android.material.appbar.AppBarLayout;
+import com.syc.utils.Utils;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
@@ -167,7 +169,7 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
         c.set(year ,month , dayOfMonth);
-        SimpleDateFormat formater = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
         String setDate = formater.format(c.getTime());
         if(root==1){
             if(searchactivity_dateEnd.getText().toString().isEmpty()){
@@ -180,6 +182,7 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
                 }
             }
         }
+
         if(root==2){
             if(searchactivity_dateBegin.getText().toString().isEmpty()){
                 searchactivity_dateEnd.setText(setDate);
@@ -257,8 +260,11 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
                     //to simplify code, concat is donne
                     back.putExtra("fqSearch", sBuildFQ);
                     back.putExtra("qSearch", searchactivity_text.getText().toString());
-                    back.putExtra("sBeginDate", searchactivity_dateBegin.getText().toString());
-                    back.putExtra("sEndDate", searchactivity_dateEnd.getText().toString());
+
+                    String testDate = Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy","yyyyMMdd");
+
+                    back.putExtra("sBeginDate", Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
+                    back.putExtra("sEndDate", Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
                     back.putExtra("goSearch", true);
                 }
             }else{//Verify is ko, return in form

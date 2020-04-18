@@ -212,7 +212,7 @@ public class Utils {
                 .commit();
     }
 
-    public static String addSharedArticlesViewed(String pArticleViewed, String psharedArticlesViewed, Integer nbArticlesSave) {
+    public static String addSharedArticlesViewed(String psharedArticlesViewed, String pArticleViewed, Integer nbArticlesSave) {
         if(psharedArticlesViewed.isEmpty()){
             psharedArticlesViewed += pArticleViewed;
         }else{
@@ -356,9 +356,9 @@ public class Utils {
 
     /**
      * launch notification with options, message content number of hits
-     * @param title
-     * @param message
-     * @param pcontext
+     * @param title : name of application
+     * @param message : personnal message like xx actuality for you
+     * @param pcontext : context of activity
      */
     public static void showNotification(String title, String message, Context pcontext) {
         pcontext.getApplicationContext();
