@@ -175,11 +175,18 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
             if(searchactivity_dateEnd.getText().toString().isEmpty()){
                 searchactivity_dateBegin.setText(setDate);
             }else{
+                if( Integer.parseInt(Utils.convertDate(searchactivity_dateEnd.getText().toString(),"dd/MM/yyyy", "yyyyMMdd")) >= Integer.parseInt(Utils.convertDate(setDate,"dd/MM/yyyy", "yyyyMMdd")) ){
+                    searchactivity_dateBegin.setText(setDate);
+                }else{
+                    Toast.makeText(getBaseContext(), "start date must be smaller than end date.", Toast.LENGTH_LONG).show();
+                }
+                /*
                 if(Integer.valueOf(searchactivity_dateEnd.getText().toString()) >= Integer.valueOf(setDate)){
                     searchactivity_dateBegin.setText(setDate);
                 }else{
                     Toast.makeText(getBaseContext(), "start date must be smaller than end date.", Toast.LENGTH_LONG).show();
                 }
+                */
             }
         }
 
@@ -187,7 +194,7 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
             if(searchactivity_dateBegin.getText().toString().isEmpty()){
                 searchactivity_dateEnd.setText(setDate);
             }else{
-                if(Integer.valueOf(searchactivity_dateBegin.getText().toString()) <= Integer.valueOf(setDate)){
+                if( Integer.parseInt( Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy", "yyyyMMdd")) <= Integer.parseInt(Utils.convertDate(setDate,"dd/MM/yyyy", "yyyyMMdd")) ){
                     searchactivity_dateEnd.setText(setDate);
                 }else{
                     Toast.makeText(getBaseContext(), "start date must be smaller than end date.", Toast.LENGTH_LONG).show();
@@ -260,11 +267,8 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
                     //to simplify code, concat is donne
                     back.putExtra("fqSearch", sBuildFQ);
                     back.putExtra("qSearch", searchactivity_text.getText().toString());
-
-                    String testDate = Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy","yyyyMMdd");
-
                     back.putExtra("sBeginDate", Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
-                    back.putExtra("sEndDate", Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
+                    back.putExtra("sEndDate", Utils.convertDate(searchactivity_dateEnd.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
                     back.putExtra("goSearch", true);
                 }
             }else{//Verify is ko, return in form
