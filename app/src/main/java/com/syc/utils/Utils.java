@@ -343,7 +343,7 @@ public class Utils {
                     TimeUnit.DAYS,
                     PeriodicWorkRequest.MIN_PERIODIC_FLEX_MILLIS,
                     TimeUnit.MILLISECONDS)
-                    .setInitialDelay(delay,TimeUnit.MINUTES)
+                    .setInitialDelay(0,TimeUnit.MINUTES)
                     .build();
             //pull periodic job in queue
             mWorkManager.enqueueUniquePeriodicWork("nyt_periodic", ExistingPeriodicWorkPolicy.REPLACE, mRequest);

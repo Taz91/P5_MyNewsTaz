@@ -180,13 +180,6 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
                 }else{
                     Toast.makeText(getBaseContext(), "start date must be smaller than end date.", Toast.LENGTH_LONG).show();
                 }
-                /*
-                if(Integer.valueOf(searchactivity_dateEnd.getText().toString()) >= Integer.valueOf(setDate)){
-                    searchactivity_dateBegin.setText(setDate);
-                }else{
-                    Toast.makeText(getBaseContext(), "start date must be smaller than end date.", Toast.LENGTH_LONG).show();
-                }
-                */
             }
         }
 

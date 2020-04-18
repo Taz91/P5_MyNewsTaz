@@ -29,18 +29,18 @@ public class ArticlesViewedTest {
         }
         //invalidate test
         assertNotEquals(articlesViewedTab[0],"srtxx");
-        articles = Utils.addSharedArticlesViewed(articlesViewedTab[0],articles,30);
+        articles = Utils.addSharedArticlesViewed(articles,articlesViewedTab[0],30);
         //first add test
         assertEquals(articles,articlesViewedTab[0]);
         //second add test
-        articles = Utils.addSharedArticlesViewed(articlesViewedTab[1],articles,30);
+        articles = Utils.addSharedArticlesViewed(articles,articlesViewedTab[1],30);
         assertEquals(articles, "str0:str1");
 
         // ======================================= List articles viewed: add over size (add 10, size 5)
         // add 10 item with size max = 5,
         articles = "";
         for (int i=0; i< 10; i++){
-            articles = Utils.addSharedArticlesViewed(articlesViewedTab[i],articles,5);
+            articles = Utils.addSharedArticlesViewed(articles,articlesViewedTab[i],5);
         }
         // add result must this :
         articlesRef = "str5:str6:str7:str8:str9";
@@ -58,7 +58,7 @@ public class ArticlesViewedTest {
         //add all list to test article exist
         for (int i=0; i< 7; i++){
             article = "str" + i;
-            articles = Utils.addSharedArticlesViewed(article,articles,30);
+            articles = Utils.addSharedArticlesViewed(articles, article,30);
         }
         assertTrue(Utils.isArticleViewed("str3",articles));
         assertFalse(Utils.isArticleViewed("strxx",articles));
