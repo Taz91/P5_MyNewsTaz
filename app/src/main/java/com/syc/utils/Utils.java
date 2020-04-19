@@ -339,11 +339,11 @@ public class Utils {
 
             PeriodicWorkRequest mRequest = new PeriodicWorkRequest.Builder(
                     NotificationWorker.class,
-                    1,
-                    TimeUnit.DAYS,
+                    15,
+                    TimeUnit.MINUTES,
                     PeriodicWorkRequest.MIN_PERIODIC_FLEX_MILLIS,
                     TimeUnit.MILLISECONDS)
-                    .setInitialDelay(0,TimeUnit.MINUTES)
+                    .setInitialDelay(delay,TimeUnit.MINUTES)
                     .build();
             //pull periodic job in queue
             mWorkManager.enqueueUniquePeriodicWork("nyt_periodic", ExistingPeriodicWorkPolicy.REPLACE, mRequest);
@@ -361,7 +361,7 @@ public class Utils {
      * @param pcontext : context of activity
      */
     public static void showNotification(String title, String message, Context pcontext) {
-        pcontext.getApplicationContext();
+        //pcontext.getApplicationContext();
         NotificationManager manager = (NotificationManager) pcontext.getSystemService(Context.NOTIFICATION_SERVICE);
         String channelId = "nyt_channel";
         String channelName = "nyt_name";
@@ -400,7 +400,7 @@ public class Utils {
 
         long diffMillis = (dCalDateFin.getTimeInMillis() - dCalDateDebut.getTimeInMillis())/60/1000;
 
-        //Calculate difference between now and
+        //Calculate difference between now and target time
         if(diffMillis < 5){
             dCalDateFin.add(Calendar.DATE,1);
         }
@@ -409,6 +409,4 @@ public class Utils {
         return diffMillis;
     }
 
-    //public static Boolean getbRemoveSharedPref() { return bRemoveSharedPref; }
-    //public static void setbRemoveSharedPref(Boolean bRemoveSharedPref) { Utils.bRemoveSharedPref = bRemoveSharedPref; }
 }
