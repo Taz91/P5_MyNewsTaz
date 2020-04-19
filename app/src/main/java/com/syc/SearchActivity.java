@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.google.android.material.appbar.AppBarLayout;
 import com.syc.utils.Utils;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
@@ -260,8 +259,16 @@ public class SearchActivity extends AppCompatActivity implements DatePickerDialo
                     //to simplify code, concat is donne
                     back.putExtra("fqSearch", sBuildFQ);
                     back.putExtra("qSearch", searchactivity_text.getText().toString());
-                    back.putExtra("sBeginDate", Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
-                    back.putExtra("sEndDate", Utils.convertDate(searchactivity_dateEnd.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
+                    if(searchactivity_dateBegin.getText().toString().isEmpty()){
+                        back.putExtra("sBeginDate", "");
+                    }else{
+                        back.putExtra("sBeginDate", Utils.convertDate(searchactivity_dateBegin.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
+                    }
+                    if(searchactivity_dateEnd.getText().toString().isEmpty()){
+                        back.putExtra("sEndDate", "");
+                    }else{
+                        back.putExtra("sEndDate", Utils.convertDate(searchactivity_dateEnd.getText().toString(),"dd/MM/yyyy","yyyyMMdd"));
+                    }
                     back.putExtra("goSearch", true);
                 }
             }else{//Verify is ko, return in form

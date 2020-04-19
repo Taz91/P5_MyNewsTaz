@@ -97,6 +97,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
         String articles = Utils.getSharedArticlesViewed();
         if (isArticleViewed(article,articles)) {
             holder.itemView.setBackgroundColor(Color.parseColor("#dbdce0"));
+        } else{
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         /**

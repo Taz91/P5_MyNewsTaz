@@ -107,6 +107,8 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.MyViewHolder> {
         String articles = Utils.getSharedArticlesViewed();
         if (isArticleViewed(article,articles)) {
             holder.itemView.setBackgroundColor(Color.parseColor("#dbdce0"));
+        }else{
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         /**

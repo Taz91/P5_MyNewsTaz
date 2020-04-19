@@ -66,7 +66,6 @@ public class Utils {
     public static String convertDate(String pDate, String pOldFormat, String pNewFormat){
         SimpleDateFormat oldFormatDate = new SimpleDateFormat(pOldFormat);
         SimpleDateFormat newFormatDate = new SimpleDateFormat(pNewFormat);
-
         pDate = pDate.substring(0,10);
         try {
             pDate = newFormatDate.format(oldFormatDate.parse(pDate));
